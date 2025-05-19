@@ -19,7 +19,7 @@ public class OrbitalCamera
 
     float distanceFromTarget;
 
-    float degree = 1.0f;
+    // float degree = 1.0f;
 
     public OrbitalCamera(GameObject camera, Vector3 pos, Vector3 lookAt, Vector3 up)
     {

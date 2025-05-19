@@ -8,13 +8,13 @@ public class SceneA_Script : MonoBehaviour
     GameObject orbitalCameraGO;
     GameObject firstPersonCameraGO;
     OrbitalCamera orbital; // should probably call it OrbitalCameraController?
-    GameObject origin;
+    GameObject fullViewPoint;
     GameObject currentCamera;
 
     void Start()
     {
-        origin = new GameObject();
-        origin.transform.position = new Vector3(0, 0, 0);
+        fullViewPoint = new GameObject("Orbital Camera - full scene view point");
+        fullViewPoint.transform.position = new Vector3(4, 2, 0);
 
         Debug.Log("SceneA_Script::Start()");
         orbitalCameraGO = GameObject.Find("OrbitalCamera");
@@ -29,7 +29,7 @@ public class SceneA_Script : MonoBehaviour
         Vector3 forward = lookAt - pos;
         orbital = new OrbitalCamera(orbitalCameraGO, pos, lookAt, Vector3.Cross(forward, right));
 
-        orbital.CenterOn(origin);
+        orbital.CenterOn(fullViewPoint);
     }
 
     void SwapCameras()
@@ -42,7 +42,7 @@ public class SceneA_Script : MonoBehaviour
         orbital.Update(); // TODO: change so it calls the current camera controller's Update() instead
 
         if (Input.GetKeyDown(KeyCode.A)) {
-            orbital.CenterOn(origin);
+            orbital.CenterOn(fullViewPoint);
         }
 
         if (Input.GetKeyDown(KeyCode.S))
