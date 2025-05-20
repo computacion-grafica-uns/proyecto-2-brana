@@ -3,6 +3,9 @@ Shader "BlinnPhong"
     Properties {
         [NoScaleOffset] _MainTex("Texture", 2D) = "" {}
         _PointLightPos("Point Light Pos", Vector) = (1.0, 1.0, 1.0)
+        _SpecularExponent("Specular Exponent", Float) = 1.0
+        _AmbientLightStrength("Ambient light", Float) = 0.1
+        _RedComponent("Red", Float) = 0.0
     }
 
     SubShader {
@@ -29,48 +32,49 @@ Shader "BlinnPhong"
             };
 
             sampler2D _MainTex;
+            float _AmbientLightStrength;
+            float _SpecularExponent;
+            float3 _PointLightPos;
 
+            float _RedComponent;
             v2f vert (vertex_in v) {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = v.uv;
-                // o.normal = mul(transpose(unity_WorldToObject), v.normal.xyz);
-                o.normal = mul(UNITY_MATRIX_IT_MV, v.normal.xyz);
+                o.normal = mul(transpose(unity_WorldToObject), v.normal.xyz);
+                // o.normal = mul(UNITY_MATRIX_IT_MV, v.normal.xyz);
 
-                o.viewDirection = _WorldSpaceCameraPos - o.vertex;
+                o.viewDirection = _WorldSpaceCameraPos - o.vertex; // vector from object's vertex towards the camera's position
                 return o;
             }
 
             fixed4 frag (v2f i) : SV_Target {
-                // float3 baseColor = tex2D(_MainTex, i.uv);
-                float3 baseColor = float3(.6,0,0);
+                float3 baseColor = tex2D(_MainTex, i.uv);
+                // float3 baseColor = float3(153.0/255.0, 0, 0
+                // float3 baseColor = float3(_RedComponent, 0, 0);
 
-                float ambientStrength = 0.05;
-                float3 ambientColor = ambientStrength * baseColor;
+                float3 ambientColor = _AmbientLightStrength * baseColor;
 
-                float3 pointLightPos = float3(0, 2, 2);
-                float3 lightDirection = pointLightPos - i.vertex;
-                float3 n = normalize(i.normal);
+                float3 lightDirection = normalize(_PointLightPos - i.vertex); // vector from vertex towards light (normalized)
+                float3 n = -normalize(i.normal); // why does negating it work?
                 float diffuseComponent = max(dot(lightDirection, n), 0.0);
                 float3 diffuseColor = diffuseComponent * baseColor;
 
                 // +++++++++++++++++++++
 
-                // float3 viewDirection = ...;
-                // float3 viewDirection = float3(2, 2, 0);
-                float3 viewDirection = i.viewDirection;
-
-                float3 reflectDirection = lightDirection - (2.0 * dot(n, lightDirection) * n);
+                float3 viewDirection = normalize(i.viewDirection);
                 float3 halfAngleVector = normalize(lightDirection + viewDirection);
-                float specularExponent = 8.0;
                 float specularComponent = pow( 
                     max(
-                        dot(viewDirection, reflectDirection),
+                        dot(viewDirection, halfAngleVector),
                         0.0
                     ),
-                    specularExponent
+                    _SpecularExponent
                 );
                 float3 specularColor = float3(0.3, 0.3, 0.3) * specularComponent;
+
+                specularColor = float3(0,0,0); // disable for now
+
                 return half4(ambientColor + diffuseColor + specularColor, 1.0);
 
                 // return half4(ambientColor + diffuseColor, 1.0);
