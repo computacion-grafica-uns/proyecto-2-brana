@@ -1,6 +1,7 @@
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static UnityEngine.UI.Image;
 
 // TODO: remove fps camera - Scene A doesn't need it
@@ -42,6 +43,11 @@ public class SceneA_Script : MonoBehaviour
     void Update() {
         orbital.Update(); // TODO: change so it calls the current camera controller's Update() instead
 
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            SwitchScenes();
+        }
+
         if (Input.GetKeyDown(KeyCode.A)) {
             orbital.CenterOn(fullViewPoint);
         }
@@ -66,5 +72,11 @@ public class SceneA_Script : MonoBehaviour
                 hitObject.transform.localScale = hitObject.transform.localScale + new Vector3(0.1f, 0.1f, 0.1f);
             }
         }
+    }
+
+    void SwitchScenes()
+    {
+        SceneManager.UnloadSceneAsync("SceneA");
+        SceneManager.LoadScene("SceneB");
     }
 }

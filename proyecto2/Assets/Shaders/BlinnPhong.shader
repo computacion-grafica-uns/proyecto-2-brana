@@ -47,7 +47,8 @@ Shader "BlinnPhong"
                 float3 radiance = ambientColor;
 
                 fixed4 uv_color = tex2D(_MainTex, i.uv);
-                return half4(ambientColor + uv_color, 1.0);
+                // return half4(ambientColor + uv_color, 1.0);
+                return uv_color;
             }
             ENDCG
         }
