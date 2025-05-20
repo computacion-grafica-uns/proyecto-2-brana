@@ -3,12 +3,18 @@ using UnityEditor;
 using UnityEngine;
 using static UnityEngine.UI.Image;
 
-// TODO: remove fps camera - Scene A doesn't need it
-public class SceneA_Script : MonoBehaviour
+public class SceneB_Script : MonoBehaviour
 {
+    // TODO: tag all new objects with SceneObject
+    // Then, the requirement of centering the camera on all objects can be done
+    // either by rays on MeshColliders
+    // or by iterating on each SceneObject-tagged GameObject and centering the camera on it
+
     GameObject orbitalCameraGO;
     GameObject firstPersonCameraGO;
-    OrbitalCamera orbital; // should probably call it OrbitalCameraController?
+    OrbitalCamera orbital;
+    // FirstPersonCamera fpsController;
+
     GameObject fullViewPoint;
     GameObject currentCamera;
 
@@ -17,7 +23,7 @@ public class SceneA_Script : MonoBehaviour
         fullViewPoint = new GameObject("Orbital Camera - full scene view point");
         fullViewPoint.transform.position = new Vector3(4, 2, 0);
 
-        Debug.Log("SceneA_Script::Start()");
+        Debug.Log("SceneB_Script::Start()");
         orbitalCameraGO = GameObject.Find("OrbitalCamera");
         firstPersonCameraGO = GameObject.Find("FPSCamera");
         orbitalCameraGO.SetActive(true);
@@ -35,14 +41,16 @@ public class SceneA_Script : MonoBehaviour
 
     void SwapCameras()
     {
-        orbitalCameraGO.SetActive( !orbitalCameraGO.activeInHierarchy );
-        firstPersonCameraGO.SetActive( !firstPersonCameraGO.activeInHierarchy );
+        orbitalCameraGO.SetActive(!orbitalCameraGO.activeInHierarchy);
+        firstPersonCameraGO.SetActive(!firstPersonCameraGO.activeInHierarchy);
     }
 
-    void Update() {
+    void Update()
+    {
         orbital.Update(); // TODO: change so it calls the current camera controller's Update() instead
 
-        if (Input.GetKeyDown(KeyCode.A)) {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
             orbital.CenterOn(fullViewPoint);
         }
 
@@ -51,7 +59,9 @@ public class SceneA_Script : MonoBehaviour
             SwapCameras();
         }
 
-        if (Input.GetMouseButtonDown(0)) {
+        /*
+        if (Input.GetMouseButtonDown(0))
+        {
             RaycastHit hit;
             Camera c = currentCamera.GetComponent<Camera>();
             Ray ray = c.ScreenPointToRay(Input.mousePosition);
@@ -63,8 +73,9 @@ public class SceneA_Script : MonoBehaviour
                 GameObject hitObject = hit.collider.gameObject;
                 Debug.Log("Hit " + hitObject.name);
                 orbital.CenterOn(hitObject);
-                hitObject.transform.localScale = hitObject.transform.localScale + new Vector3(0.1f, 0.1f, 0.1f);
+                hitObject.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
             }
         }
+        */
     }
 }

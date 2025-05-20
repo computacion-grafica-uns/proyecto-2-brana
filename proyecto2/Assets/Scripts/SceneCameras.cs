@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class FirstPersonCamera
 {
-
+    // TODO: view bobbing
 }
 
 public class OrbitalCamera
