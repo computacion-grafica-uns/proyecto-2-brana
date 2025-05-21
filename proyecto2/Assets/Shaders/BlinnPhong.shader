@@ -29,10 +29,10 @@ Shader "BlinnPhong"
             struct v2f {
                 float2 uv: TEXCOORD0;
                 float4 vertex: SV_POSITION;
-                float3 normal: NORMAL;
-                float3 viewDirection: float3;
 
-                float4 worldPosition : float4;
+                float3 worldNormal: WORLD_NORMAL;
+                float3 viewDirection: VIEW_DIR;
+                float4 worldPosition : WORLD_POS;
             };
 
             sampler2D _MainTex;
@@ -45,8 +45,7 @@ Shader "BlinnPhong"
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = v.uv;
-                o.normal = mul(transpose(unity_WorldToObject), v.normal.xyz);
-
+                o.worldNormal = mul(transpose(unity_WorldToObject), v.normal.xyz); 
                 o.worldPosition = mul(unity_ObjectToWorld, v.vertex);
 
                 // See docs: https://docs.unity3d.com/Manual/SL-BuiltinFunctions.html
@@ -65,7 +64,7 @@ Shader "BlinnPhong"
 
                 // Diffuse reflection
                 float3 lightDirection = normalize(_WorldSpaceLightPos0 - i.worldPosition); // from worldPos to lightPos
-                float3 n = normalize(i.normal);
+                float3 n = normalize(i.worldNormal);
                 float diffuseComponent = max( dot(lightDirection, n), 0.0);
                 float3 diffuseColor = diffuseComponent * baseColor;
                 // diffuseColor = float3(0,0,0);
@@ -78,7 +77,7 @@ Shader "BlinnPhong"
                 // float3 reflectVector = lightDirection - 2.0 * (dot(n, lightDirection) * n);
                 float3 reflectVector = reflect(-lightDirection, n);
                 
-                float specularComponent_blinn = pow( max( dot(viewDirection, halfAngleVector), 0.0 ), 512. );
+                float specularComponent_blinn = pow( max( dot(viewDirection, halfAngleVector), 0.0 ), 1024. );
                 float specularComponent = pow( max( dot(viewDirection, reflectVector), 0.0 ), 8.0 );
                 float3 specularColor = float3(0.1, 0.1, 0.1) * specularComponent_blinn;
                 // specularColor = float3(0.05, 0.05, 0.05) * specularComponent;
