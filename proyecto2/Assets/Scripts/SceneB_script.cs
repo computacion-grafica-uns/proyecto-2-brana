@@ -1,7 +1,5 @@
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
-using static UnityEngine.UI.Image;
+using UnityEngine.Android;
 
 public class SceneB_Script : MonoBehaviour
 {
@@ -9,11 +7,15 @@ public class SceneB_Script : MonoBehaviour
     // Then, the requirement of centering the camera on all objects can be done
     // either by rays on MeshColliders
     // or by iterating on each SceneObject-tagged GameObject and centering the camera on it
+    // the vague idea is this:
+    // GameObject[] allSceneObjects = GameObject.FindGameObjectsWithTag("SceneObject");
+    // int focusedObjectIndex = -1; // pressing some key will cycle between -1 and allSceneObjects.length-1
 
     GameObject orbitalCameraGO;
     GameObject firstPersonCameraGO;
     OrbitalCamera orbital;
     // FirstPersonCamera fpsController;
+
 
     GameObject fullViewPoint;
     GameObject currentCamera;
@@ -47,6 +49,8 @@ public class SceneB_Script : MonoBehaviour
 
     void Update()
     {
+        // TODO: "light" gameobject pos passed into the shader
+
         orbital.Update(); // TODO: change so it calls the current camera controller's Update() instead
 
         if (Input.GetKeyDown(KeyCode.A))

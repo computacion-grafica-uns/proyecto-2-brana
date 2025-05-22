@@ -6,6 +6,8 @@ Shader "BlinnPhong"
         _SpecularExponent("Specular Exponent", Float) = 1.0
         _AmbientLightStrength("Ambient light", Float) = 0.1
         _RedComponent("Red", Float) = 0.0
+        _CameraPos("Camera Position", Vector) = (1,1,0)
+        _CameraLookAt("Camera Look At", Vector) = (-0.2315317, -0.01178938, 0.06181386)
     }
 
     SubShader {
@@ -45,7 +47,8 @@ Shader "BlinnPhong"
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = v.uv;
-                o.worldNormal = mul(transpose(unity_WorldToObject), v.normal.xyz); 
+                // o.worldNormal = mul(transpose(unity_WorldToObject), v.normal.xyz);
+                o.worldNormal = UnityObjectToWorldNormal(v.normal);
                 o.worldPosition = mul(unity_ObjectToWorld, v.vertex);
 
                 // See docs: https://docs.unity3d.com/Manual/SL-BuiltinFunctions.html
@@ -56,7 +59,8 @@ Shader "BlinnPhong"
             }
 
             fixed4 frag (v2f i) : SV_Target {
-                float3 baseColor = tex2D(_MainTex, i.uv);
+                // I need an aspect ratio of the polygon size, not of the whole object. then I can scale textures without stretching
+                float3 baseColor = tex2D(_MainTex, i.uv * (4.0 * (1.38966 / 0.8)));
                 // baseColor = float3(153.0/255.0, 0, 0);
                 // baseColor = float3(_RedComponent, 0, 0);
 
@@ -73,13 +77,16 @@ Shader "BlinnPhong"
                 float3 viewDirection = normalize(i.viewDirection);
                 float3 halfAngleVector = normalize(lightDirection + viewDirection);
 
-                // https://registry.khronos.org/OpenGL-Refpages/gl4/html/reflect.xhtml
-                // float3 reflectVector = lightDirection - 2.0 * (dot(n, lightDirection) * n);
-                float3 reflectVector = reflect(-lightDirection, n);
                 
-                float specularComponent_blinn = pow( max( dot(viewDirection, halfAngleVector), 0.0 ), 1024. );
+                float3 reflectVector = -lightDirection - 2.0 * (dot(n, lightDirection) * n);
+                // https://registry.khronos.org/OpenGL-Refpages/gl4/html/reflect.xhtml
+                // float3 reflectVector = reflect(lightDirection, n);
+
+                float specularComponent_blinn = pow( max( dot(viewDirection, halfAngleVector), 0.0 ), 512. );
                 float specularComponent = pow( max( dot(viewDirection, reflectVector), 0.0 ), 8.0 );
-                float3 specularColor = float3(0.1, 0.1, 0.1) * specularComponent_blinn;
+
+                // what is this float3 value? specular strength? per frequency channel?
+                float3 specularColor = float3(0.1, 0.1, 0.1) * specularComponent;
                 // specularColor = float3(0.05, 0.05, 0.05) * specularComponent;
                 // specularColor = float3(0,0,0); // disable for now
 
