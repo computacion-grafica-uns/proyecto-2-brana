@@ -84,10 +84,7 @@ Shader "OrenNayarOuwerkerk"
                 float3 reflectVector = reflect(-lightDirection, n);
 
                 float specularComponent = pow( max( dot(viewDirection, reflectVector), 0.0 ), 64.0 * _Specular );
-                if (_Specular == 0) {
-                    specularComponent = 0;
-                }
-                
+                if (_Specular == 0) { specularComponent = 0; }
 
                 float attenuation = 1.0;
                 float3 lightingModel = specularComponent +
