@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BP_Wood
-  m_Shader: {fileID: 4800000, guid: 12b8d2337a0585740b3d3761136f5569, type: 3}
+  m_Name: ONV_Metal
+  m_Shader: {fileID: 4800000, guid: 021fdcaf13f9ec440bb330b434b9ecfc, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -44,7 +44,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: be314cdb53075f24cb994c64af62acb8, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -61,7 +61,6 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AmbientLightStrength: 0.05
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
@@ -69,27 +68,19 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _Ka: 0.25
-    - _Kd: 0.4
-    - _Ks: 0.347
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _RedComponent: 1
+    - _Roughness: 1.41
     - _SmoothnessTextureChannel: 0
-    - _SpecularExponent: 1024
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _AmbientLightColor: {r: 1, g: 1, b: 1, a: 1}
-    - _CameraLookAt: {r: 1, g: 1, b: 1, a: 1}
-    - _CameraPos: {r: 1, g: -2.01, b: -0.8, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _DiffuseColor: {r: 0.6415094, g: 0.12406549, b: 0.12406549, a: 0.79607844}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _PointLightIntensity: {r: 1, g: 1, b: 1, a: 1}
-    - _PointLightPos: {r: 1, g: 1, b: 1, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

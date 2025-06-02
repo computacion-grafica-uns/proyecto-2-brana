@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BP_Wood
-  m_Shader: {fileID: 4800000, guid: 12b8d2337a0585740b3d3761136f5569, type: 3}
+  m_Name: BPTest
+  m_Shader: {fileID: 4800000, guid: 928e8c628d710bc46a80f0d28e304f16, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -61,7 +61,6 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AmbientLightStrength: 0.05
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
@@ -69,27 +68,29 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _Ka: 0.25
-    - _Kd: 0.4
-    - _Ks: 0.347
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _RedComponent: 1
     - _SmoothnessTextureChannel: 0
-    - _SpecularExponent: 1024
+    - _SpecularExponent: 16
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _AmbientLightColor: {r: 1, g: 1, b: 1, a: 1}
-    - _CameraLookAt: {r: 1, g: 1, b: 1, a: 1}
-    - _CameraPos: {r: 1, g: -2.01, b: -0.8, a: 1}
+    - _AmbientLightColor: {r: 0, g: 0, b: 0, a: 0}
+    - _AmbientLightIntensity: {r: 0.23584908, g: 0.23584908, b: 0.23584908, a: 0}
+    - _CameraLookAt: {r: -0.787, g: -0.01178938, b: 0.488, a: 1}
+    - _CameraPos: {r: 1, g: 1, b: 0, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _DiffuseLightColor: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Ka: {r: 0.24528301, g: 0.24528301, b: 0.24528301, a: 0}
+    - _Kd: {r: 0.26415092, g: 0.26415092, b: 0.26415092, a: 0}
+    - _Ks: {r: 0.6320754, g: 0.6320754, b: 0.6320754, a: 0}
     - _PointLightIntensity: {r: 1, g: 1, b: 1, a: 1}
-    - _PointLightPos: {r: 1, g: 1, b: 1, a: 0}
+    - _PointLightPos: {r: 0.89, g: 1, b: 1, a: 1}
+    - _SpecularLightColor: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

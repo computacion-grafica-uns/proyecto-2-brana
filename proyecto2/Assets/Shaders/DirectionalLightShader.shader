@@ -44,7 +44,6 @@ Shader "DirectionalLightShader"
                 o.uv = v.uv;
 
                 o.normal = v.normal;
-                // o.worldNormal = mul(transpose(unity_WorldToObject), v.normal.xyz); // TODO: which matrices to use?
                 o.worldNormal = UnityObjectToWorldNormal(v.normal);
                 o.worldPosition = mul(unity_ObjectToWorld, v.vertex);
                 return o;

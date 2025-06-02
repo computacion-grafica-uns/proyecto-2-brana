@@ -3,11 +3,16 @@ Shader "BlinnPhong"
     Properties {
         [NoScaleOffset] _MainTex("Texture", 2D) = "" {}
         _PointLightPos("Point Light Pos", Vector) = (1.0, 1.0, 1.0)
-        _SpecularExponent("Specular Exponent", Float) = 1.0
-        _AmbientLightStrength("Ambient light", Float) = 0.1
-        _RedComponent("Red", Float) = 0.0
+        _PointLightIntensity("Point Light Intensity", Vector) = (1.0, 1.0, 1.0)
         _CameraPos("Camera Position", Vector) = (1,1,0)
         _CameraLookAt("Camera Look At", Vector) = (-0.2315317, -0.01178938, 0.06181386)
+
+        // TODO: float3
+        _Ka("Material Ka", Float) = 0.05
+        _Kd("Material Kd", Float) = 0.1
+        _Ks("Material Ks", Float) = 0.1
+        _SpecularExponent("Specular Exponent", Float) = 1024.0
+        _AmbientLightColor("Ambient light color", Color) = (1,1,1,1)
     }
 
     SubShader {
@@ -38,16 +43,17 @@ Shader "BlinnPhong"
             };
 
             sampler2D _MainTex;
-            float _AmbientLightStrength;
+            float _Ka; float _Kd; float _Ks;
             float _SpecularExponent;
             float3 _PointLightPos;
 
-            float _RedComponent;
+            float3 _AmbientLightColor;
+
             v2f vert (vertex_in v) {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = v.uv;
-                // o.worldNormal = mul(transpose(unity_WorldToObject), v.normal.xyz);
+
                 o.worldNormal = UnityObjectToWorldNormal(v.normal);
                 o.worldPosition = mul(unity_ObjectToWorld, v.vertex);
 
@@ -58,37 +64,36 @@ Shader "BlinnPhong"
                 return o;
             }
 
+            float3 _PointLightIntensity;
+            float3 _CameraPos;
+
             fixed4 frag (v2f i) : SV_Target {
                 // I need an aspect ratio of the polygon size, not of the whole object. then I can scale textures without stretching
                 float3 baseColor = tex2D(_MainTex, i.uv * (4.0 * (1.38966 / 0.8)));
-                // baseColor = float3(153.0/255.0, 0, 0);
-                // baseColor = float3(_RedComponent, 0, 0);
 
-                float3 ambientColor = _AmbientLightStrength * baseColor;
+                float3 distanceToLight = length(_WorldSpaceLightPos0 - i.worldPosition);
+
+                // made up constants: a = 0.1, b = 0.2, c = 0.3
+                float attenuationFactor_quadratic = 1 / (0.1 + 0.2 * distanceToLight + 0.3 * distanceToLight * distanceToLight);
+                float attenuationFactor = 1 / (0.1 + 0.2 * distanceToLight); // linear attenuation
+
+                // ambient 
+                float3 ambientColor = _Ka * _AmbientLightColor * baseColor;
 
                 // Diffuse reflection
                 float3 lightDirection = normalize(_WorldSpaceLightPos0 - i.worldPosition); // from worldPos to lightPos
                 float3 n = normalize(i.worldNormal);
                 float diffuseComponent = max( dot(lightDirection, n), 0.0);
-                float3 diffuseColor = diffuseComponent * baseColor;
-                // diffuseColor = float3(0,0,0);
+                float3 diffuseColor = attenuationFactor * _PointLightIntensity * float3(_Kd, _Kd, _Kd) * baseColor * diffuseComponent;
 
                 // Specular reflection
-                float3 viewDirection = normalize(i.viewDirection);
+                float3 viewDirection = normalize(_CameraPos - i.worldPosition); // normalize(i.viewDirection);
                 float3 halfAngleVector = normalize(lightDirection + viewDirection);
+                float3 reflectVector = reflect(lightDirection, n);
+                float specularComponent_Blinn = pow( max( dot(viewDirection, halfAngleVector), 0.0 ), _SpecularExponent );
+                float specularComponent = pow( max( dot(viewDirection, reflectVector), 0.0 ), _SpecularExponent / 2 );
 
-                
-                float3 reflectVector = -lightDirection - 2.0 * (dot(n, lightDirection) * n);
-                // https://registry.khronos.org/OpenGL-Refpages/gl4/html/reflect.xhtml
-                // float3 reflectVector = reflect(lightDirection, n);
-
-                float specularComponent_blinn = pow( max( dot(viewDirection, halfAngleVector), 0.0 ), 512. );
-                float specularComponent = pow( max( dot(viewDirection, reflectVector), 0.0 ), 8.0 );
-
-                // what is this float3 value? specular strength? per frequency channel?
-                float3 specularColor = float3(0.1, 0.1, 0.1) * specularComponent;
-                // specularColor = float3(0.05, 0.05, 0.05) * specularComponent;
-                // specularColor = float3(0,0,0); // disable for now
+                float3 specularColor = attenuationFactor * _PointLightIntensity * float3(_Ks, _Ks, _Ks) * specularComponent;
 
                 half4 finalColor = half4(ambientColor + diffuseColor + specularColor, 1.0);
                 return finalColor;
