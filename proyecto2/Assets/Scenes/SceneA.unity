@@ -179,6 +179,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 153430669326387661, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 871e76caa786c634e965eacf17e9337e, type: 2}
     - target: {fileID: 919132149155446097, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
       propertyPath: m_Name
       value: Blinn-Phong Metal
@@ -1299,6 +1303,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 153430669326387661, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 57bf43d259c630446bffb9255bfb5dda, type: 2}
     - target: {fileID: 919132149155446097, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
       propertyPath: m_Name
       value: Blinn-Phong Propio
@@ -1619,7 +1627,7 @@ PrefabInstance:
     - target: {fileID: 153430669326387661, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 8119100420c2eaf4a9426d8424f85aad, type: 2}
+      objectReference: {fileID: 2100000, guid: 57bf43d259c630446bffb9255bfb5dda, type: 2}
     - target: {fileID: 919132149155446097, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
       propertyPath: m_Name
       value: Blinn-Phong Simple
@@ -2167,6 +2175,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 153430669326387661, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: b38da8edceb433d4caf68161b464f941, type: 2}
     - target: {fileID: 919132149155446097, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
       propertyPath: m_Name
       value: Otro Metal
@@ -2421,6 +2433,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 153430669326387661, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 413d4235b2c0bd74b92b7fa8b2c8be08, type: 2}
     - target: {fileID: 919132149155446097, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
       propertyPath: m_Name
       value: Blinn-Phong Plastico
@@ -3027,6 +3043,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 153430669326387661, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: bde860e24d8d8ae4aa64425cf6c533b6, type: 2}
     - target: {fileID: 919132149155446097, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
       propertyPath: m_Name
       value: Otro Plastico
@@ -3246,7 +3266,7 @@ PrefabInstance:
     - target: {fileID: 153430669326387661, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: b38da8edceb433d4caf68161b464f941, type: 2}
+      objectReference: {fileID: 2100000, guid: 15f22fae2e6eedc4e83b760253368405, type: 2}
     - target: {fileID: 919132149155446097, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
       propertyPath: m_Name
       value: Otro Barro
