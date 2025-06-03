@@ -18,6 +18,9 @@ public class SceneA_Script : MonoBehaviour
         fullViewPoint = new GameObject("Orbital Camera - full scene view point");
         fullViewPoint.transform.position = new Vector3(4, 2, 0);
 
+        GameObject center = new GameObject("Scene Center");
+        center.transform.position = new Vector3(1, 0, 0);
+
         Debug.Log("SceneA_Script::Start()");
         orbitalCameraGO = GameObject.Find("OrbitalCamera");
         firstPersonCameraGO = GameObject.Find("FPSCamera");
@@ -25,13 +28,14 @@ public class SceneA_Script : MonoBehaviour
         firstPersonCameraGO.SetActive(false);
         currentCamera = orbitalCameraGO;
 
-        Vector3 right = new Vector3(0, 0, -1);
-        Vector3 pos = new Vector3(3, 4, 0);
-        Vector3 lookAt = Vector3.zero;
-        Vector3 forward = lookAt - pos;
-        orbital = new OrbitalCamera(orbitalCameraGO, pos, lookAt, Vector3.Cross(forward, right));
 
-        orbital.CenterOn(fullViewPoint);
+        currentCamera.transform.position = new Vector3(4, 2, 0); 
+        orbital = new OrbitalCamera(orbitalCameraGO, center.transform);
+
+        /* currentCamera.transform.position = new Vector3(4, 2, 0);
+        Debug.Log("Pre: " + currentCamera.transform.up);
+        currentCamera.transform.LookAt(new Vector3(1,0,0));
+        Debug.Log("Pos: " + currentCamera.transform.up); */
     }
 
     void SwapCameras()
@@ -48,11 +52,11 @@ public class SceneA_Script : MonoBehaviour
             SwitchScenes();
         }
 
-        if (Input.GetKeyDown(KeyCode.A)) {
+        if (Input.GetKeyDown(KeyCode.R)) {
             orbital.CenterOn(fullViewPoint);
         }
 
-        if (Input.GetKeyDown(KeyCode.S))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             SwapCameras();
         }

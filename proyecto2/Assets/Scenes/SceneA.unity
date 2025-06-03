@@ -1519,7 +1519,7 @@ PrefabInstance:
     - target: {fileID: 153430669326387661, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 19335d30094b7124d8dd417cdecf7b77, type: 2}
+      objectReference: {fileID: 2100000, guid: 1d80c5c7e3b576b4e9b6028062836809, type: 2}
     - target: {fileID: 919132149155446097, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
       propertyPath: m_Name
       value: Otro Simple

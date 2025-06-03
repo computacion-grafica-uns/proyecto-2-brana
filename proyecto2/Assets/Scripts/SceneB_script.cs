@@ -36,9 +36,8 @@ public class SceneB_Script : MonoBehaviour
         Vector3 pos = new Vector3(3, 4, 0);
         Vector3 lookAt = Vector3.zero;
         Vector3 forward = lookAt - pos;
-        orbital = new OrbitalCamera(orbitalCameraGO, pos, lookAt, Vector3.Cross(forward, right));
-
-        orbital.CenterOn(fullViewPoint);
+        // orbital = new OrbitalCamera(orbitalCameraGO, pos, lookAt, Vector3.Cross(forward, right));
+        // orbital.CenterOn(fullViewPoint);
     }
 
     void SwapCameras()
@@ -53,7 +52,7 @@ public class SceneB_Script : MonoBehaviour
 
         orbital.Update(); // TODO: change so it calls the current camera controller's Update() instead
 
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             orbital.CenterOn(fullViewPoint);
         }
