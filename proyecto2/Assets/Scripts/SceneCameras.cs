@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
@@ -50,6 +51,10 @@ public class OrbitalCamera
 
         Debug.DrawLine(this.target.position, cameraPosition, Color.red, 5.0f);
 
+        // both are 45, so I can't rely on this to be sure up points downwards
+        // Debug.LogError(Vector3.Angle(new Vector3(1, 1, 0), new Vector3(1,0,0)));
+        // Debug.LogError(Vector3.Angle(new Vector3(1, -1, 0), new Vector3(1, 0, 0)));
+
     }
 
     public void CenterOn(GameObject obj) { CenterOn(obj.transform); }
@@ -70,30 +75,26 @@ public class OrbitalCamera
     public void Update()
     {
        Debug.DrawLine(this.target.position, cameraPosition, Color.red);
-       if (Input.GetKey(KeyCode.O)) {
+       if (Input.GetKey(KeyCode.O) && (distanceFromTarget < 30.0f)) {
             distanceFromTarget += shiftFactor * zoomSpeed * Time.deltaTime;
             this.camera.transform.position = cameraPosition;
        }
-       if (Input.GetKey(KeyCode.P)) { 
+       if (Input.GetKey(KeyCode.P) && (distanceFromTarget > 1.0f)) { 
            distanceFromTarget -= shiftFactor * zoomSpeed * Time.deltaTime;
            this.camera.transform.position = cameraPosition;
        }
 
-        if (Input.GetKey(KeyCode.A))
-        {
+        if (Input.GetKey(KeyCode.A)) {
             Yaw(yawSpeed * shiftFactor * Time.deltaTime);
         }
-        if (Input.GetKey(KeyCode.D))
-        {
+        if (Input.GetKey(KeyCode.D)) {
             Yaw(-yawSpeed * shiftFactor * Time.deltaTime);
         }
 
-        if (Input.GetKey(KeyCode.W))
-        {
+        if (Input.GetKey(KeyCode.W)) {
             Pitch(-yawSpeed * shiftFactor * Time.deltaTime);
         }
-        if (Input.GetKey(KeyCode.S))
-        {
+        if (Input.GetKey(KeyCode.S)) {
             Pitch(yawSpeed * shiftFactor * Time.deltaTime);
         }
 
@@ -101,6 +102,9 @@ public class OrbitalCamera
        if (Input.GetKeyUp(KeyCode.LeftShift)) { shiftFactor = 1.0f; }
     }
 
+    // how to limit pitch?
+    // the idea is to never let up point below the XZ plane
+    // that is, that the angle between (up.x, up.y, up.z) and (up.x, 0, up.z) is [0, 180]?
     public void Pitch(float deg)
     {
         // rotate up and forward around right
