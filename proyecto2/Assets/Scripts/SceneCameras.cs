@@ -34,7 +34,8 @@ public class OrbitalCamera
         // Vector3 fwd = (camera.transform.position - target.position).normalized;
         distanceFromTarget = Vector3.Distance(camera.transform.position, target.position); // this.distanceFromTarget = (camera.transform.position - target.position).magnitude;
         Debug.LogWarning("Initial distance: " + distanceFromTarget);
-        this.right = -camera.transform.right; // does it matter? it does, for yaw
+        this.right = -camera.transform.right;
+        // this matters for yaw
         // for yaw, up is the same as the camera up
         // right is -cam.right
         // because the rotation of forward and right around up is of the vectors coming out of target
@@ -64,8 +65,6 @@ public class OrbitalCamera
         Debug.DrawLine(this.target.position, t.position, Color.blue, 5.0f);
         this.target = t;
         camera.transform.position = cameraPosition;
-        // Vector3 posOnNewSphere = t.position - distanceFromTarget * (t.position - camera.transform.position).normalized;
-        // camera.transform.position = posOnNewSphere;
         camera.transform.LookAt(t);
     }
 
@@ -102,9 +101,6 @@ public class OrbitalCamera
        if (Input.GetKeyUp(KeyCode.LeftShift)) { shiftFactor = 1.0f; }
     }
 
-    // how to limit pitch?
-    // the idea is to never let up point below the XZ plane
-    // that is, that the angle between (up.x, up.y, up.z) and (up.x, 0, up.z) is [0, 180]?
     public void Pitch(float deg)
     {
         // rotate up and forward around right
@@ -116,8 +112,7 @@ public class OrbitalCamera
         Vector3 newUp = rotateAround(currentUp, deg, currentRight);
         camera.transform.up = newUp;
         camera.transform.position = target.position + distanceFromTarget * newFwd;
-        camera.transform.LookAt(target); // wonder if it'll conflict with the computed newUp
-
+        camera.transform.LookAt(target); // can it conflict with the computed newUp?
     }
 
     public void Yaw(float deg)
@@ -129,8 +124,6 @@ public class OrbitalCamera
 
         Vector3 newCameraPos = target.position + distanceFromTarget * newForward;
         this.camera.transform.position = newCameraPos;
-        // this.camera.transform.right = newRight;
-        // maybe ignore right and so on, and call LookAt
         camera.transform.LookAt(target.position);
     }
 
