@@ -140,15 +140,18 @@ public class SceneB_script : MonoBehaviour
             mat.SetVector("_CameraPos", currentCamera.transform.position);
         }
 
-        mannequinArm.transform.rotation = Quaternion.Slerp(armTo, armFrom, armT);
+        // mannequinArm.transform.rotation = Quaternion.Slerp(armTo, armFrom, armT);
+        // mannequinArm.transform.rotation = Mathf.LerpAngle(armFrom, armTo, armT);
+        mannequinArm.transform.rotation = Quaternion.Lerp(Quaternion.Euler(armFrom), Quaternion.Euler(armTo), armT);
         armT += dir * Time.deltaTime;
         if (armT > 1.0f || armT < 0.0f) { dir *= -1; }
-        Debug.LogWarning(armT);
-
+        // Debug.LogWarning(armT);
     }
 
-    Quaternion armTo = new Quaternion(-0.0249267649f, -0.0938767791f, 0.00675223535f, 0.995248795f);
-    Quaternion armFrom = new Quaternion(0.0544426553f, -0.0222741198f, -0.0790993497f, 0.995129704f);
+    Vector3 armFrom = new Vector3(357.228729f, 349.197906f, 356.499756f);
+    Vector3 armTo = new Vector3(357.228729f, 349.197876f, 320.350006f);
+    // Quaternion armTo = new Quaternion(-0.0249267649f, -0.0938767791f, 0.00675223535f, 0.995248795f);
+    // Quaternion armFrom = new Quaternion(0.0544426553f, -0.0222741198f, -0.0790993497f, 0.995129704f);
     float armT = 0.0f;
     float dir = 1.0f;
 

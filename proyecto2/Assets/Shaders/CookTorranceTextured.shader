@@ -75,7 +75,6 @@ Shader "CookTorrance"
             fixed4 frag(v2f i) : SV_Target{
                 float PI = 3.14159265359;
 
-
                 float2 scaledUV = TRANSFORM_TEX(i.uv, _MainTex);
                 float4 baseColor = tex2D(_MainTex, scaledUV);
 
