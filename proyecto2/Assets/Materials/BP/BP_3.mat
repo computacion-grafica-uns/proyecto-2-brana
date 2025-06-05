@@ -76,7 +76,7 @@ Material:
     - _SpecularExponent: 128
     - _SpecularHighlights: 1
     - _SpotLightInner: 12
-    - _SpotLightOuter: 17.9
+    - _SpotLightOuter: 15
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
@@ -91,9 +91,9 @@ Material:
     - _Kd: {r: 0.8113208, g: 0, b: 0, a: 0}
     - _Ks: {r: 1, g: 1, b: 1, a: 0}
     - _PointLightColor: {r: 1, g: 1, b: 1, a: 1}
-    - _PointLightPos: {r: 1, g: 1, b: 1, a: 1}
+    - _PointLightPos: {r: 1, g: 2, b: 1, a: 1}
     - _SpotLightColor: {r: 1, g: 1, b: 1, a: 1}
-    - _SpotLightDirection: {r: 0, g: -1.4, b: -0.02, a: 1}
-    - _SpotLightPos: {r: 0.27, g: 5.81, b: 0.14, a: 1}
+    - _SpotLightDirection: {r: 0, g: -1, b: 1, a: 1}
+    - _SpotLightPos: {r: 0, g: 8, b: -6.53, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

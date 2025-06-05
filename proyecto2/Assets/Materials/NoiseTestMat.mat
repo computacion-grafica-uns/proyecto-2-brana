@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ONV_Simple
-  m_Shader: {fileID: 4800000, guid: e55d1184c6953e941b9acbfec05930b2, type: 3}
+  m_Name: NoiseTestMat
+  m_Shader: {fileID: 4800000, guid: c38c9418e31466f42b8c65b5d065d5b4, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -44,7 +44,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 8d3182534e0fab441bbbaf1af17ff833, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -72,27 +72,26 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Roughness: 0.3
     - _SmoothnessTextureChannel: 0
-    - _Specular: 0.6
     - _SpecularHighlights: 1
-    - _SpotLightInner: 12.5
-    - _SpotLightOuter: 15
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
+    - _amplitude: 1.5
+    - _frequency: 2
+    - _gain: 0.5
+    - _lacunarity: 5
+    - _monochromatic: 0
+    - _octaves: 7
+    - _offsetX: 0
+    - _offsetY: 0
+    - _power: 2.17
+    - _range: 0.5
+    - _scale: 1
+    - _value: 0
     m_Colors:
-    - _CameraPos: {r: 3, g: 3, b: 0, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DiffuseColor: {r: 0.3207547, g: 0.3207547, b: 0.3207547, a: 1}
-    - _DirectionalLightColor: {r: 1, g: 1, b: 1, a: 1}
-    - _DirectionalLightDir: {r: 1, g: -1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _PointLightColor: {r: 1, g: 1, b: 1, a: 1}
-    - _PointLightPos: {r: 2, g: 3, b: 1, a: 1}
-    - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
-    - _SpotLightColor: {r: 1, g: 1, b: 1, a: 1}
-    - _SpotLightDirection: {r: 0, g: -1, b: 0, a: 1}
-    - _SpotLightPos: {r: -5, g: 3, b: -4, a: 1}
+    - _color: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

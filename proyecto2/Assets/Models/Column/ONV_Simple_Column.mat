@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ONV_Simple
+  m_Name: ONV_Simple_Column
   m_Shader: {fileID: 4800000, guid: e55d1184c6953e941b9acbfec05930b2, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -44,7 +44,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 8d3182534e0fab441bbbaf1af17ff833, type: 3}
+        m_Texture: {fileID: 2800000, guid: 45e4bc8d46528254899c40282f48121c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:

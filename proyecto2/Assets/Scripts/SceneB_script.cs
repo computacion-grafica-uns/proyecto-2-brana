@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.Android;
+using System.Collections.Generic;
 
 public class SceneB_Script : MonoBehaviour
 {
@@ -19,11 +19,15 @@ public class SceneB_Script : MonoBehaviour
 
     GameObject fullViewPoint;
     GameObject currentCamera;
+    List<Material> sceneMaterials;
 
     void Start()
     {
         fullViewPoint = new GameObject("Orbital Camera - full scene view point");
         fullViewPoint.transform.position = new Vector3(4, 2, 0);
+
+        GameObject center = new GameObject("Scene Center");
+        center.transform.position = new Vector3(1, 0, 0);
 
         Debug.Log("SceneB_Script::Start()");
         orbitalCameraGO = GameObject.Find("OrbitalCamera");
@@ -32,12 +36,28 @@ public class SceneB_Script : MonoBehaviour
         firstPersonCameraGO.SetActive(false);
         currentCamera = orbitalCameraGO;
 
-        Vector3 right = new Vector3(0, 0, -1);
-        Vector3 pos = new Vector3(3, 4, 0);
-        Vector3 lookAt = Vector3.zero;
-        Vector3 forward = lookAt - pos;
-        // orbital = new OrbitalCamera(orbitalCameraGO, pos, lookAt, Vector3.Cross(forward, right));
-        // orbital.CenterOn(fullViewPoint);
+
+        currentCamera.transform.position = new Vector3(4, 2, 0);
+        orbital = new OrbitalCamera(orbitalCameraGO, center.transform);
+
+        /* currentCamera.transform.position = new Vector3(4, 2, 0);
+        Debug.Log("Pre: " + currentCamera.transform.up);
+        currentCamera.transform.LookAt(new Vector3(1,0,0));
+        Debug.Log("Pos: " + currentCamera.transform.up); */
+
+        // GameObject[] sceneObjects = SceneManager.GetActiveScene().GetRootGameObjects();
+        GameObject[] sceneObjects = UnityEngine.Object.FindObjectsOfType<GameObject>();
+        Debug.Log(sceneObjects.Length + " Scene Objects: " + sceneObjects);
+        sceneMaterials = new List<Material>();
+        foreach (GameObject go in sceneObjects)
+        {
+            if (go.activeInHierarchy && go.GetComponent<MeshRenderer>() != null && go.GetComponent<MeshRenderer>().material != null)
+            {
+                Debug.Log("Found " + go.GetComponent<MeshRenderer>().material);
+                sceneMaterials.Add(go.GetComponent<MeshRenderer>().material);
+            }
+        }
+
     }
 
     void SwapCameras()
@@ -62,7 +82,6 @@ public class SceneB_Script : MonoBehaviour
             SwapCameras();
         }
 
-        /*
         if (Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;
@@ -79,6 +98,16 @@ public class SceneB_Script : MonoBehaviour
                 hitObject.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
             }
         }
-        */
+
+        foreach (Material mat in sceneMaterials)
+        {
+            // all materials will have
+            // * _PointLightPos, _PointLightColor
+            // * _DirectionalLightDir, _DirectionalLightColor
+            // * _SpotLightPos, _SpotLightDirection, _SpotLightColor
+            // I can disable them by setting _*Color to (0,0,0,0) or moving them really far away
+
+            mat.SetVector("_SpotLightDirection", currentCamera.transform.forward);
+        }
     }
 }

@@ -17,6 +17,7 @@ Shader "BPThreeLights" {
 
         _AmbientLightColor("Ambient Light Color", Color) = (0,0,0,0)
 
+        _MainTex("Texture", 2D) = "white" {}
         _Ka("Material Ka", Color) = (0,0,0,0)
         _Kd("Material Kd", Color) = (0,0,0,0)
         _Ks("Material Ks", Color) = (0,0,0,0)
@@ -59,6 +60,7 @@ Shader "BPThreeLights" {
                     return o;
                 }
 
+                sampler2D _MainTex;
                 float3 _CameraPos;
                 float3 _AmbientLightColor;
                 float3 _Ka, _Kd, _Ks;
