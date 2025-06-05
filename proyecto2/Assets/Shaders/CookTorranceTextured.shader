@@ -1,12 +1,12 @@
-Shader "CookTorrance"
+Shader "CookTorranceTextured"
 {
     Properties
     {
-        _MainTex ("Texture", 2D) = "white" {}
+        _MainTex("Texture", 2D) = "white" {}
     }
-    SubShader
+        SubShader
     {
-        Tags {"Queue"="Transparent" "RenderType"="Transparent"}
+        Tags {"Queue" = "Transparent" "RenderType" = "Transparent"}
         Blend SrcAlpha OneMinusSrcAlpha
 
         Pass
@@ -17,7 +17,7 @@ Shader "CookTorrance"
 
             #include "UnityLightingCommon.cginc"
             #include "UnityCG.cginc"
-            
+
             struct appdata {
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
@@ -37,7 +37,7 @@ Shader "CookTorrance"
 
             sampler2D _MainTex;
 
-            v2f vert (appdata v) {
+            v2f vert(appdata v) {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = v.uv;
@@ -49,12 +49,12 @@ Shader "CookTorrance"
                 return o;
             }
 
-            fixed4 frag (v2f i) : SV_Target {
+            fixed4 frag(v2f i) : SV_Target {
                 float4 _AmbientLightColor = float4(1.0, 1.0, 1.0, 1.0);
                 float4 _PointLightColor = float4(1.0, 1.0, 1.0, 1.0);
                 float PI = 3.14159265359;
 
-                fixed4 baseColor = float4(0.64, 0.64, 0.64, 1.0);
+                fixed4 baseColor = tex2D(_MainTex, i.uv * (4.0 * (1.38966 / 0.8)));
 
                 float3 n = normalize(i.worldNormal);
                 float3 viewDirection = normalize(_WorldSpaceCameraPos - i.worldPosition);
@@ -68,22 +68,20 @@ Shader "CookTorrance"
                 float attenuationFactor_quadratic = 1 / (0.1 + 0.2 * distanceToLight + 0.3 * distanceToLight * distanceToLight);
                 float attenuationFactor = 1 / (0.1 + 0.2 * distanceToLight); // linear attenuation
 
-                attenuationFactor = 1.0;
-
                 // ambient 
                 float3 ambientColor = 0.05 * _AmbientLightColor;
 
                 // Diffuse part
-                float diffuseComponent = max( dot(lightDirection, n), 0.0);
+                float diffuseComponent = max(dot(lightDirection, n), 0.0);
                 float3 diffuseColor = attenuationFactor * baseColor * diffuseComponent;
 
                 float roughness = 0.5; // move to property
 
                 // Cook-Torrance specular
                 float cos_normalToHalfAngle = max(0, dot(n, halfAngleVector));
-		        float cos_normalToViewDir = max(0, dot(n, viewDirection));
-		        float cos_lightToHalfAngle = max(0, dot(lightDirection, halfAngleVector));
-                float cos_normalToLightdir =  max(0, dot(n, lightDirection));
+                float cos_normalToViewDir = max(0, dot(n, viewDirection));
+                float cos_lightToHalfAngle = max(0, dot(lightDirection, halfAngleVector));
+                float cos_normalToLightdir = max(0, dot(n, lightDirection));
                 float Rs = 0.0;
 
                 if (cos_normalToLightdir > 0) {
@@ -97,19 +95,19 @@ Shader "CookTorrance"
                     // Normal distribution via Beckmann (D)
                     float roughness_squared = roughness * roughness;
                     float NdotH_squared = cos_normalToHalfAngle * cos_normalToHalfAngle;
-		            float r1 = 1.0 / (4.0 * roughness_squared * pow(cos_normalToHalfAngle, 4.0));
-		            float r2 = (NdotH_squared - 1.0) / (roughness_squared * NdotH_squared);
-		            float D = r1 * exp(r2);
+                    float r1 = 1.0 / (4.0 * roughness_squared * pow(cos_normalToHalfAngle, 4.0));
+                    float r2 = (NdotH_squared - 1.0) / (roughness_squared * NdotH_squared);
+                    float D = r1 * exp(r2);
 
                     // visible microfacets (G)
-		            float g1 = (2.0 * cos_normalToHalfAngle * cos_normalToViewDir) / cos_lightToHalfAngle;
-		            float g2 = (2.0 * cos_normalToHalfAngle * cos_normalToLightdir) / cos_lightToHalfAngle;
-		            float G = min(1.0, min(g1, g2));
+                    float g1 = (2.0 * cos_normalToHalfAngle * cos_normalToViewDir) / cos_lightToHalfAngle;
+                    float g2 = (2.0 * cos_normalToHalfAngle * cos_normalToLightdir) / cos_lightToHalfAngle;
+                    float G = min(1.0, min(g1, g2));
 
-                    Rs = (F*D*G) / (PI * cos_normalToLightdir * cos_normalToViewDir);
+                    Rs = (F * D * G) / (PI * cos_normalToLightdir * cos_normalToViewDir);
                 }
 
-                
+
                 float3 finalSpecular = baseColor * _PointLightColor * cos_normalToLightdir +
                                      _PointLightColor * Rs * float4(1.0, 1.0, 1.0, 1.0);
 

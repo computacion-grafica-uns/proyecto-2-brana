@@ -6,11 +6,9 @@ Shader "SimpleBlinnPhong"
         _PointLightPos("Point Light Pos", Vector) = (1.0, 1.0, 1.0)
         _PointLightIntensity("Point Light Intensity", Vector) = (1.0, 1.0, 1.0)
         _CameraPos("Camera Position", Vector) = (1,1,0)
-        _CameraLookAt("Camera Look At", Vector) = (-0.2315317, -0.01178938, 0.06181386)
 
         _AmbientLightIntensity("Light Intensity (ambient)", Color) = (0,0,0,0)
-        _DiffuseLightColor("Light Intensity (ambient)", Color) = (0,0,0,0)
-        _SpecularLightColor("Light Intensity (ambient)", Color) = (0,0,0,0)
+        _AmbientLightColor("Ambient Light Color", Color) = (0,0,0,0)
 
         _Ka("Material Ka", Color) = (0,0,0,0)
         _Kd("Material Kd", Color) = (0,0,0,0)
@@ -19,7 +17,6 @@ Shader "SimpleBlinnPhong"
     }
 
     SubShader {
-        // TODO: research what OneMinusSrcAlpha does
         Tags {"Queue"="Transparent" "RenderType"="Transparent"}
         Blend SrcAlpha OneMinusSrcAlpha
 
@@ -47,7 +44,7 @@ Shader "SimpleBlinnPhong"
 
             sampler2D _MainTex;
             float3 _Ka, _Kd, _Ks;
-            float3 _AmbientLightIntensity, _DiffuseLightColor, _SpecularLightColor;
+            float3 _AmbientLightIntensity, _AmbientLightColor;
             float _SpecularExponent;
 
             float3 _PointLightPos;
@@ -66,7 +63,8 @@ Shader "SimpleBlinnPhong"
             }
 
             fixed4 frag (v2f i) : SV_Target {
-                float3 baseColor = tex2D(_MainTex, i.uv);
+                // float3 baseColor = tex2D(_MainTex, i.uv * (4.0 * (1.38966 / 0.8)));
+                float3 baseColor = tex2D(_MainTex, i.uv * 4.0);
 
                 // float4 LightPos = either _PointLightPos or unity's world light 0
                 // then I can quickly debug
@@ -82,12 +80,12 @@ Shader "SimpleBlinnPhong"
                 float3 reflectVector = reflect(-lightDirection, normal);
                 float3 halfAngleVector = normalize(lightDirection + viewDirection);
 
-                float3 ambient = _AmbientLightIntensity * _Ka.rgb;
+                float3 ambient = _AmbientLightIntensity * _AmbientLightColor * _Ka.rgb;
 
                 float diffuseComponent = max(dot(lightDirection, normal), 0.0);
 
-                float3 srcColor = (baseColor == float4(0,0,0,0) ? _Kd : baseColor); // _Kd only if no baseColor?
-                float3 diffuse = attenuationFactor * _PointLightIntensity * diffuseComponent * srcColor;
+                float3 srcColor = (baseColor == float4(0,0,0,0) ? _Kd : baseColor.rgb); // _Kd only if no baseColor?
+                float3 diffuse = attenuationFactor * _PointLightIntensity * diffuseComponent * srcColor.rgb;
 
                 float phong = pow(max( dot(viewDirection, reflectVector), 0.0), _SpecularExponent);
                 float blinn_phong = pow(max( dot(viewDirection, halfAngleVector), 0.0), _SpecularExponent);

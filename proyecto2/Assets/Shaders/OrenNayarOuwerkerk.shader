@@ -2,7 +2,6 @@ Shader "OrenNayarOuwerkerk"
 {
     Properties
     {
-        _MainTex ("Texture", 2D) = "white" {}
         _Roughness("Roughness", float) = 0.5
         _Specular("Specular", float) = 0.0
         _DiffuseColor("Diffuse Color", Color) = (0.4, 0.4, 0.4, 1.0)
@@ -33,14 +32,10 @@ Shader "OrenNayarOuwerkerk"
                 float2 uv : TEXCOORD0;
                 float4 vertex : SV_POSITION;
 
-                // TODO: semantics?
                 float3 worldNormal: WORLDNORMAL;
                 float4 worldPosition: WORLDPOS;
                 float3 viewDirection: VIEWDIR;
             };
-
-            sampler2D _MainTex;
-            float4 _MainTex_ST;
 
             v2f vert (appdata v) {
                 v2f o;
@@ -62,9 +57,7 @@ Shader "OrenNayarOuwerkerk"
             {
                 _Roughness = saturate(_Roughness);
 
-                fixed4 col = tex2D(_MainTex, i.uv);
-
-                float4 diffuseColor = _DiffuseColor; // float4(0.4, 0.4, 0.4, 1.0);
+                float4 diffuseColor = _DiffuseColor;
 
                 float3 viewDirection = normalize(_WorldSpaceCameraPos  - i.worldPosition);
                 float3 lightDirection = normalize(_WorldSpaceLightPos0 - i.worldPosition); // from worldPos to lightPos
