@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 3
   tags:
   - SceneObject
+  - ScenePointLight
+  - SceneDirectionalLight
+  - ForearmArmature
   layers:
   - Default
   - TransparentFX

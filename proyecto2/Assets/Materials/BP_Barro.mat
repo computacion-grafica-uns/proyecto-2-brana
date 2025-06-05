@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: BP_Barro
-  m_Shader: {fileID: 4800000, guid: 12b8d2337a0585740b3d3761136f5569, type: 3}
+  m_Shader: {fileID: 4800000, guid: 1b475122fe694c84395a68c364062a77, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -61,7 +61,6 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AmbientLightStrength: 0.05
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
@@ -73,16 +72,23 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _RedComponent: 1
     - _SmoothnessTextureChannel: 0
-    - _SpecularExponent: 8
+    - _SpecularExponent: 1
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
+    - _AmbientLightColor: {r: 0.5660378, g: 0.5660378, b: 0.5660378, a: 0}
+    - _AmbientLightIntensity: {r: 1, g: 1, b: 1, a: 0}
+    - _CameraLookAt: {r: -0.2315317, g: -0.01178938, b: 0.06181386, a: 1}
+    - _CameraPos: {r: 1, g: 1, b: 0, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _PointLightPos: {r: 1, g: 1, b: 1, a: 1}
+    - _Ka: {r: 0.23584908, g: 0.23584908, b: 0.23584908, a: 0}
+    - _Kd: {r: 0.49056602, g: 0.24107866, b: 0, a: 0}
+    - _Ks: {r: 0, g: 0, b: 0, a: 0}
+    - _PointLightIntensity: {r: 1, g: 1, b: 1, a: 1}
+    - _PointLightPos: {r: 1.8, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

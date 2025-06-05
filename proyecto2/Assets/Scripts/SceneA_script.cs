@@ -14,6 +14,11 @@ public class SceneA_Script : MonoBehaviour
     GameObject fullViewPoint;
     GameObject currentCamera;
 
+    GameObject pointLight, directionalLight;
+    GameObject[] mainObjects;
+    List<Material> sceneMaterials;
+    int focusedObject = 0;
+
     void Start()
     {
         fullViewPoint = new GameObject("Orbital Camera - full scene view point");
@@ -33,12 +38,6 @@ public class SceneA_Script : MonoBehaviour
         currentCamera.transform.position = new Vector3(4, 2, 0); 
         orbital = new OrbitalCamera(orbitalCameraGO, center.transform);
 
-        /* currentCamera.transform.position = new Vector3(4, 2, 0);
-        Debug.Log("Pre: " + currentCamera.transform.up);
-        currentCamera.transform.LookAt(new Vector3(1,0,0));
-        Debug.Log("Pos: " + currentCamera.transform.up); */
-
-        // GameObject[] sceneObjects = SceneManager.GetActiveScene().GetRootGameObjects();
         GameObject[] sceneObjects = UnityEngine.Object.FindObjectsOfType<GameObject>();
         Debug.Log(sceneObjects.Length + " Scene Objects: " + sceneObjects);
         sceneMaterials = new List<Material>();
@@ -48,10 +47,11 @@ public class SceneA_Script : MonoBehaviour
                 sceneMaterials.Add(go.GetComponent<MeshRenderer>().material);
             }
         }
-        
-    }
 
-    List<Material> sceneMaterials;
+        mainObjects = GameObject.FindGameObjectsWithTag("SceneObject");
+        pointLight = GameObject.FindGameObjectsWithTag("ScenePointLight")[0];
+        directionalLight = GameObject.FindGameObjectsWithTag("SceneDirectionalLight")[0];
+    }
 
     void SwapCameras()
     {
@@ -59,8 +59,18 @@ public class SceneA_Script : MonoBehaviour
         firstPersonCameraGO.SetActive( !firstPersonCameraGO.activeInHierarchy );
     }
 
+    void SwitchFocus() {
+        orbital.CenterOn(mainObjects[focusedObject]);
+        focusedObject++;
+        if (focusedObject >= mainObjects.Length) { focusedObject = 0; }
+    }
+
     void Update() {
         orbital.Update(); // TODO: change so it calls the current camera controller's Update() instead
+
+        if (Input.GetKeyDown(KeyCode.F)) {
+            SwitchFocus();
+        }
 
         if (Input.GetKeyDown(KeyCode.Q)) {
             SwitchScenes();
@@ -74,6 +84,16 @@ public class SceneA_Script : MonoBehaviour
             SwapCameras();
         }
 
+        /*
+        // 1,2,3 to disable and enable each light
+        if (Input.GetKeyDown(KeyCode.1)) {
+            foreach (Material mat in sceneMaterials)
+            {
+                mat.Set...
+            }
+        }
+        */
+
         if (Input.GetMouseButtonDown(0)) {
             RaycastHit hit;
             Camera c = currentCamera.GetComponent<Camera>();
@@ -85,7 +105,7 @@ public class SceneA_Script : MonoBehaviour
                 GameObject hitObject = hit.collider.gameObject;
                 Debug.Log("Hit " + hitObject.name);
                 orbital.CenterOn(hitObject);
-                hitObject.transform.localScale = hitObject.transform.localScale + new Vector3(0.1f, 0.1f, 0.1f);
+                // hitObject.transform.localScale = hitObject.transform.localScale + new Vector3(0.1f, 0.1f, 0.1f);
             }
         }
 
@@ -96,8 +116,12 @@ public class SceneA_Script : MonoBehaviour
             // * _SpotLightPos, _SpotLightDirection, _SpotLightColor
             // I can disable them by setting _*Color to (0,0,0,0) or moving them really far away
 
+            mat.SetVector("_DirectionalLightDir", -directionalLight.transform.position); // vector from its position to the origin
+            mat.SetVector("_PointLightPos", pointLight.transform.position);
+
+            // Make the camera hold a flashlight
             mat.SetVector("_SpotLightPos", currentCamera.transform.position);
-            mat.SetVector("_SpotLightDirection", currentCamera.transform.forward.normalized); // for example
+            mat.SetVector("_SpotLightDirection", currentCamera.transform.forward.normalized);
             mat.SetVector("_CameraPos", currentCamera.transform.position);
         }
     }

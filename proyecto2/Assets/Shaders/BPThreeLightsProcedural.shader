@@ -1,4 +1,4 @@
-Shader "BPThreeLights" {
+Shader "BPThreeLightsProcedural" {
     Properties{
         _PointLightPos("Point Light Pos", Vector) = (2.0, 3.0, 1.0, 1.0)
         _PointLightColor("Point Light Color", Color) = (1.0, 1.0, 1.0, 1.0)

@@ -2,7 +2,27 @@ Shader "CookTorrance"
 {
     Properties
     {
-        _MainTex ("Texture", 2D) = "white" {}
+        _PointLightPos("Point Light Pos", Vector) = (2.0, 3.0, 1.0, 1.0)
+        _PointLightColor("Point Light Color", Color) = (1.0, 1.0, 1.0, 1.0)
+
+        _DirectionalLightDir("Directional Light Direction", Vector) = (1, -1, 1)
+        _DirectionalLightColor("Directional Light Color", Color) = (1.0, 1.0, 1.0, 1.0)
+
+        _SpotLightPos("Spotlight Position", Vector) = (-5, 3, -4)
+        _SpotLightDirection("Spotlight Direction", Vector) = (0, -1, 0)
+        _SpotLightColor("Spotlight Color", Color) = (1.0, 1.0, 1.0, 1.0)
+        _SpotLightInner("Spotlight Inner Angle", Float) = 12.5
+        _SpotLightOuter("Spotlight Outer Angle", Float) = 15.0
+
+
+        _CameraPos("Camera Position", Vector) = (3,3,0)
+
+        _AmbientLightColor("Ambient Light Color", Color) = (0,0,0,0)
+
+        _DiffuseColor("Diffuse Color", Color) = (0,0,0,0)
+        _Roughness("Roughness", Range(0, 1)) = 0.5
+        _Metallic("Metallic", Range(0, 1)) = 0.5
+        [Toggle] _Dielectric("Dieletric?", Float) = 1.0
     }
     SubShader
     {
@@ -15,7 +35,6 @@ Shader "CookTorrance"
             #pragma vertex vert
             #pragma fragment frag
 
-            #include "UnityLightingCommon.cginc"
             #include "UnityCG.cginc"
             
             struct appdata {
@@ -24,60 +43,57 @@ Shader "CookTorrance"
                 float3 normal: NORMAL;
             };
 
-            struct v2f
-            {
-                float2 uv : TEXCOORD0;
-                float4 vertex : SV_POSITION;
-
-                // TODO: semantics?
-                float3 worldNormal: WORLDNORMAL;
-                float4 worldPosition: WORLDPOS;
-                float3 viewDirection: VIEWDIR;
+            struct v2f {
+                float2 uv: TEXCOORD0;
+                float4 vertex: SV_POSITION;
+                float3 normal: NORMAL;
+                float3 worldNormal: WORLD_NORMAL;
+                float4 worldPosition : WORLD_POS;
             };
 
-            sampler2D _MainTex;
-
-            v2f vert (appdata v) {
+            v2f vert(appdata v) {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = v.uv;
-
+                o.normal = v.normal;
                 o.worldNormal = UnityObjectToWorldNormal(v.normal);
                 o.worldPosition = mul(unity_ObjectToWorld, v.vertex);
-
-                o.viewDirection = WorldSpaceViewDir(v.vertex); // from vertex pos to camera pos
                 return o;
             }
 
+            float3 _CameraPos;
+            float3 _AmbientLightColor;
+            float _Roughness, _Metallic;
+            float4 _DiffuseColor;
+
+            float4 _PointLightPos;
+            float4 _PointLightColor;
+
             fixed4 frag (v2f i) : SV_Target {
-                float4 _AmbientLightColor = float4(1.0, 1.0, 1.0, 1.0);
-                float4 _PointLightColor = float4(1.0, 1.0, 1.0, 1.0);
                 float PI = 3.14159265359;
 
-                fixed4 baseColor = float4(0.64, 0.64, 0.64, 1.0);
+                fixed4 baseColor = _DiffuseColor;
 
                 float3 n = normalize(i.worldNormal);
-                float3 viewDirection = normalize(_WorldSpaceCameraPos - i.worldPosition);
-                float3 lightDirection = normalize(_WorldSpaceLightPos0 - i.worldPosition); // from worldPos to lightPos
+                float3 viewDirection = normalize(_CameraPos - i.worldPosition);
+                float3 lightDirection = normalize(_PointLightPos - i.worldPosition); // from worldPos to lightPos
                 // float3 lightDirection = normalize(_PointLightPos - i.worldPosition);
                 float3 halfAngleVector = normalize(lightDirection + viewDirection);
 
-                float3 distanceToLight = length(_WorldSpaceLightPos0 - i.worldPosition);
+                float3 distanceToLight = length(_PointLightPos - i.worldPosition);
+                float attenuationFactor_quadratic = 1 / (1 + 0.14 * distanceToLight + 0.07 * distanceToLight * distanceToLight);
+                float attenuationFactor = 1 / (1 + 0.14 * distanceToLight); // linear attenuation
 
-                // made up constants: a = 0.1, b = 0.2, c = 0.3
-                float attenuationFactor_quadratic = 1 / (0.1 + 0.2 * distanceToLight + 0.3 * distanceToLight * distanceToLight);
-                float attenuationFactor = 1 / (0.1 + 0.2 * distanceToLight); // linear attenuation
-
-                attenuationFactor = 1.0;
+                // attenuationFactor = 1.0; // undo attenuation for now
 
                 // ambient 
-                float3 ambientColor = 0.05 * _AmbientLightColor;
+                float3 ambientColor = 0.5 * _AmbientLightColor;
 
                 // Diffuse part
                 float diffuseComponent = max( dot(lightDirection, n), 0.0);
                 float3 diffuseColor = attenuationFactor * baseColor * diffuseComponent;
 
-                float roughness = 0.5; // move to property
+                float roughness = _Roughness;
 
                 // Cook-Torrance specular
                 float cos_normalToHalfAngle = max(0, dot(n, halfAngleVector));
@@ -89,7 +105,7 @@ Shader "CookTorrance"
                 if (cos_normalToLightdir > 0) {
                     // Fresnel/Schlick (F)
                     float pi_reciprocal = 1 / PI;
-                    float n1 = 1.0, n2 = 1.333;
+                    float n1 = 1.0, n2 = 1.333; // test IOR values - air into water
                     float Schlick_R0 = ((n1 - n2) / (n1 + n2)) * ((n1 - n2) / (n1 + n2));
                     float Schlick_cos = max(dot(lightDirection, halfAngleVector), 0.0);
                     float F = Schlick_R0 + (1.0 - Schlick_R0) * pow(1.0 - cos_lightToHalfAngle, 5.0);
@@ -108,12 +124,11 @@ Shader "CookTorrance"
 
                     Rs = (F*D*G) / (PI * cos_normalToLightdir * cos_normalToViewDir);
                 }
-
                 
                 float3 finalSpecular = baseColor * _PointLightColor * cos_normalToLightdir +
-                                     _PointLightColor * Rs * float4(1.0, 1.0, 1.0, 1.0);
+                                     _PointLightColor * Rs * 10*_Metallic;
 
-                return half4(diffuseColor + finalSpecular, 1.0);
+                return half4(ambientColor + diffuseColor + finalSpecular, 1.0);
             }
             ENDCG
         }
