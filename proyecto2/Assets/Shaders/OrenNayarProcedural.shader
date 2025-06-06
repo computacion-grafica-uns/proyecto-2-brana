@@ -192,7 +192,7 @@ Shader "OrenNayarProcedural"
                     return finalDiffuse;
                 }
 
-                float _octaves, _lacunarity, _gain, _value, _amplitude, _frequency, _offsetX, _offsetY, _power, _scale, _monochromatic, _range;
+                float _octaves, _lacunarity, _gain, _value, _amplitude, _frequency, _offsetX, _offsetY, _power, _scale;
                 float fbm(float2 p)
                 {
                     p = p * _scale + float2(_offsetX, _offsetY);
