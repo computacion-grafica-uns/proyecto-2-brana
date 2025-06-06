@@ -1,5 +1,7 @@
-Shader "BPThreeLightsProcedural" {
-    Properties{
+Shader "OrenNayarProcedural"
+{
+    Properties
+    {
         _PointLightPos("Point Light Pos", Vector) = (2.0, 3.0, 1.0, 1.0)
         _PointLightColor("Point Light Color", Color) = (1.0, 1.0, 1.0, 1.0)
 
@@ -14,7 +16,11 @@ Shader "BPThreeLightsProcedural" {
 
         _CameraPos("Camera Position", Vector) = (3,3,0)
 
-        _AmbientLightColor("Ambient Light Color", Color) = (0,0,0,0)
+        _MainTex("Texture", 2D) = "white" {}
+        _Roughness("Roughness", float) = 0.5
+        _Specular("Specular", float) = 0.0
+        _DiffuseColor("Diffuse Color", Color) = (0.4, 0.4, 0.4, 1.0)
+        _SpecularColor("Specular Color", Color) = (1.0, 1.0, 1.0, 1.0)
 
         _Ka("Material Ka", Color) = (0,0,0,0)
         _Kd("Material Kd", Color) = (0,0,0,0)
@@ -32,23 +38,24 @@ Shader "BPThreeLightsProcedural" {
         _power("Power", Range(0.1 , 5.0)) = 1.0
         _scale("Scale", Float) = 1.0
     }
-
-        SubShader{
+        SubShader
+        {
             Tags {"Queue" = "Transparent" "RenderType" = "Transparent"}
             Blend SrcAlpha OneMinusSrcAlpha
 
-            Pass {
+            Pass
+            {
                 CGPROGRAM
                 #pragma vertex vert
                 #pragma fragment frag
 
                 #include "UnityCG.cginc"
-                float PI = 3.14159265;
 
-                struct vertex_in {
+                struct appdata
+                {
                     float4 vertex: POSITION;
-                    float3 normal: NORMAL;
                     float2 uv: TEXCOORD0;
+                    float3 normal: NORMAL;
                 };
 
                 struct v2f {
@@ -59,7 +66,7 @@ Shader "BPThreeLightsProcedural" {
                     float4 worldPosition : WORLD_POS;
                 };
 
-                v2f vert(vertex_in v) {
+                v2f vert(appdata v) {
                     v2f o;
                     o.vertex = UnityObjectToClipPos(v.vertex);
                     o.uv = v.uv;
@@ -69,50 +76,74 @@ Shader "BPThreeLightsProcedural" {
                     return o;
                 }
 
-                sampler2D _MainTex;
+                float _Roughness;
+                float _Specular;
+                float4 _DiffuseColor;
+                float4 _SpecularColor;
                 float3 _CameraPos;
-                float3 _AmbientLightColor;
-                float3 _Ka, _Kd, _Ks;
-                float _SpecularExponent;
 
                 float4 _PointLightPos;
                 float4 _PointLightColor;
-                half4 computePointLight(float4 diffuseColor, float4 lightPos, float4 lightColor, float4 worldPosition, float3 normal, float3 viewDirection) {
+                half4 computePointLight(float4 diffuseColor, float roughness, float specular,
+                                        float4 lightPos, float4 lightColor, float4 worldPosition, float3 n, float3 viewDirection) {
                     float3 distanceToLight = length(lightPos - worldPosition);
                     float attenuationFactor_quadratic = 1 / (1 + 0.14 * distanceToLight + 0.07 * distanceToLight * distanceToLight);
                     float attenuationFactor = 1 / (1 + 0.14 * distanceToLight); // linear attenuation
 
                     float3 lightDirection = normalize(lightPos - worldPosition);
-                    float3 reflectVector = reflect(-lightDirection, normal);
+
+                    float roughnessSqr = roughness * roughness;
+                    float3 roughnessFraction = roughnessSqr / (roughnessSqr + float3(0.33, 0.13, 0.09));
+                    float3 oren_nayar = float3(1, 0, 0) + float3(-0.5, 0.17, 0.45) * roughnessFraction;
+                    float cos_ndotl = max(dot(n, lightDirection), 0.0);
+                    float cos_ndotv = max(dot(n, viewDirection), 0.0);
+                    float oren_nayar_s = max(dot(lightDirection, viewDirection), 0.0) - cos_ndotl * cos_ndotv;
+                    oren_nayar_s /= lerp(max(cos_ndotl, cos_ndotv), 1, step(oren_nayar_s, 0));
+
+                    // extra specular term:
                     float3 halfAngleVector = normalize(lightDirection + viewDirection);
+                    float3 reflectVector = reflect(-lightDirection, n);
 
-                    float diffuseComponent = max(dot(lightDirection, normal), 0.0);
+                    float specularComponent = pow(max(dot(viewDirection, reflectVector), 0.0), 64.0 * _Specular);
+                    if (_Specular == 0) { specularComponent = 0; }
 
-                    float3 diffuse = attenuationFactor * lightColor * diffuseComponent * diffuseColor;
+                    float attenuation = 1.0;
+                    float3 lightingModel = specularComponent +
+                        diffuseColor * cos_ndotl *
+                        (oren_nayar.x + oren_nayar.y * diffuseColor + oren_nayar.z * oren_nayar_s);
+                    float3 attenColor = attenuation * lightColor;
+                    float4 finalDiffuse = float4(lightingModel * attenColor, 1);
 
-                    float phong = pow(max(dot(viewDirection, reflectVector), 0.0), _SpecularExponent);
-                    float blinn_phong = pow(max(dot(normal, halfAngleVector), 0.0), _SpecularExponent);
-                    float3 specular = attenuationFactor * lightColor * _Ks.rgb * blinn_phong;
-
-                    return half4(diffuse + specular, 1.0);
+                    return finalDiffuse;
                 }
 
                 float3 _DirectionalLightDir;
                 float4 _DirectionalLightColor;
-                half4 computeDirectionalLight(float4 diffuseColor, float3 lightDir, float4 lightColor, float4 worldPosition, float3 normal, float3 viewDirection) {
-                    float attenuationFactor = 1; // 0.1?
+                half4 computeDirectionalLight(float4 diffuseColor, float roughness, float specular,
+                                              float3 lightDir, float4 lightColor, float4 worldPosition, float3 n, float3 viewDirection) {
                     float3 lightDirection = normalize(-lightDir); // visualize the vector as a free vector at the origin. it's the same vector at every point. make it point backwards at the source, and then normalize
-                    float3 reflectVector = reflect(-lightDirection, normal);
+
+                    float roughnessSqr = roughness * roughness;
+                    float3 roughnessFraction = roughnessSqr / (roughnessSqr + float3(0.33, 0.13, 0.09));
+                    float3 oren_nayar = float3(1, 0, 0) + float3(-0.5, 0.17, 0.45) * roughnessFraction;
+                    float cos_ndotl = max(dot(n, lightDirection), 0.0);
+                    float cos_ndotv = max(dot(n, viewDirection), 0.0);
+                    float oren_nayar_s = max(dot(lightDirection, viewDirection), 0.0) - cos_ndotl * cos_ndotv;
+                    oren_nayar_s /= lerp(max(cos_ndotl, cos_ndotv), 1, step(oren_nayar_s, 0));
+
+                    // extra specular term:
                     float3 halfAngleVector = normalize(lightDirection + viewDirection);
+                    float3 reflectVector = reflect(-lightDirection, n);
 
-                    float diffuseComponent = max(dot(normal, lightDirection), 0.0);
-                    float3 diffuse = attenuationFactor * lightColor * diffuseComponent * diffuseColor;
+                    float specularComponent = pow(max(dot(viewDirection, reflectVector), 0.0), 64.0 * _Specular);
+                    if (_Specular == 0) { specularComponent = 0; }
 
-                    float phong = pow(max(dot(viewDirection, reflectVector), 0.0), _SpecularExponent);
-                    float blinn_phong = pow(max(dot(normal, halfAngleVector), 0.0), _SpecularExponent);
-                    float3 specular = attenuationFactor * lightColor * _Ks.rgb * blinn_phong;
+                    float3 lightingModel = specularComponent +
+                        diffuseColor * cos_ndotl *
+                        (oren_nayar.x + oren_nayar.y * diffuseColor + oren_nayar.z * oren_nayar_s);
+                    float4 finalDiffuse = float4(lightingModel * lightColor, 1);
 
-                    return half4(diffuse + specular, 1.0);
+                    return finalDiffuse;
                 }
 
                 float4 _SpotLightPos;
@@ -121,21 +152,34 @@ Shader "BPThreeLightsProcedural" {
                 float _SpotLightInner;
                 float _SpotLightOuter;
                 #define DEG2RAD (0.0174533)
-                half4 computeSpotLight(float4 diffuseColor, float4 spotLightPos, float3 spotLightDir, float4 spotLightColor, float innerAngle, float outerAngle,
-                                       float4 worldPosition, float3 normal, float3 viewDirection) {
+                half4 computeSpotLight(float4 diffuseColor, float roughness, float specular, float4 spotLightPos, float3 spotLightDir, float4 spotLightColor, float innerAngle, float outerAngle,
+                    float4 worldPosition, float3 n, float3 viewDirection) {
                     float3 distanceToLight = length(spotLightPos - worldPosition);
                     float attenuationFactor_quadratic = 1 / (1 + 0.14 * distanceToLight + 0.07 * distanceToLight * distanceToLight);
                     float attenuationFactor = 1 / (1 + 0.14 * distanceToLight); // linear attenuation
 
                     float3 vectorTowardsLight = normalize(spotLightPos - worldPosition);
-                    float3 reflectVector = reflect(-vectorTowardsLight, normal);
-                    float3 halfAngleVector = normalize(vectorTowardsLight + viewDirection);
-                    float diffuseComponent = max(dot(vectorTowardsLight, normal), 0.0);
-                    float3 diffuse = attenuationFactor * spotLightColor * diffuseComponent * diffuseColor;
 
-                    float phong = pow(max(dot(viewDirection, reflectVector), 0.0), _SpecularExponent);
-                    float blinn_phong = pow(max(dot(normal, halfAngleVector), 0.0), _SpecularExponent);
-                    float3 specular = attenuationFactor * spotLightColor * _Ks.rgb * blinn_phong;
+                    float roughnessSqr = roughness * roughness;
+                    float3 roughnessFraction = roughnessSqr / (roughnessSqr + float3(0.33, 0.13, 0.09));
+                    float3 oren_nayar = float3(1, 0, 0) + float3(-0.5, 0.17, 0.45) * roughnessFraction;
+                    float cos_ndotl = max(dot(n, vectorTowardsLight), 0.0);
+                    float cos_ndotv = max(dot(n, viewDirection), 0.0);
+                    float oren_nayar_s = max(dot(vectorTowardsLight, viewDirection), 0.0) - cos_ndotl * cos_ndotv;
+                    oren_nayar_s /= lerp(max(cos_ndotl, cos_ndotv), 1, step(oren_nayar_s, 0));
+
+                    // extra specular term:
+                    float3 halfAngleVector = normalize(vectorTowardsLight + viewDirection);
+                    float3 reflectVector = reflect(-vectorTowardsLight, n);
+
+                    float specularComponent = pow(max(dot(viewDirection, reflectVector), 0.0), 64.0 * _Specular);
+                    if (_Specular == 0) { specularComponent = 0; }
+
+                    float3 lightingModel = specularComponent +
+                        diffuseColor * cos_ndotl *
+                        (oren_nayar.x + oren_nayar.y * diffuseColor + oren_nayar.z * oren_nayar_s);
+                    float3 attenColor = attenuationFactor * spotLightColor;
+                    float4 finalDiffuse = float4(lightingModel * attenColor, 1);
 
                     innerAngle = cos(innerAngle * DEG2RAD);
                     outerAngle = cos(outerAngle * DEG2RAD);
@@ -143,13 +187,12 @@ Shader "BPThreeLightsProcedural" {
                     float epsilon = innerAngle - outerAngle;
                     float intensity = clamp((theta - outerAngle) / epsilon, 0.0, 1.0);
 
-                    diffuse *= intensity;
-                    specular *= intensity;
+                    finalDiffuse *= intensity;
 
-                    return half4(diffuse + specular, 1.0);
+                    return finalDiffuse;
                 }
 
-                float _octaves, _lacunarity, _gain, _value, _amplitude, _frequency, _offsetX, _offsetY, _power, _scale;
+                float _octaves, _lacunarity, _gain, _value, _amplitude, _frequency, _offsetX, _offsetY, _power, _scale, _monochromatic, _range;
                 float fbm(float2 p)
                 {
                     p = p * _scale + float2(_offsetX, _offsetY);
@@ -192,9 +235,10 @@ Shader "BPThreeLightsProcedural" {
                     return (128.0 * value / initialSize) / 255.0;
                 }
 
-                fixed4 frag(v2f i) : SV_Target {
-                    float3 normal = normalize(i.worldNormal);
-                    float3 viewDirection = normalize(_CameraPos - i.worldPosition);
+                fixed4 frag(v2f i) : SV_Target
+                {
+                    _Roughness = clamp(_Roughness, 0.01, 0.97);
+                    _Specular = clamp(_Specular, 0.0, 4096.0);
 
                     float xPeriod = 35.0; //defines repetition of marble lines in x direction
                     float yPeriod = 30.0; //defines repetition of marble lines in y direction
@@ -205,24 +249,17 @@ Shader "BPThreeLightsProcedural" {
                     float xyValue = i.uv.x * xPeriod + i.uv.y * yPeriod + turbPower * turbulence(i.uv.xy, turbSize);
                     float sineValue = abs(sin(xyValue * 3.14159));
                     float4 diffuseColor = float4(sineValue, sineValue, sineValue, 1.0);
-                    
-                    // float c = fbm(i.uv.xy);
-                    // float4 diffuseColor = float4(c, c, c, 1.0) * float4(_Kd, 1.0);
-                    
-                    float3 ambient = _AmbientLightColor * _Ka.rgb;
 
-                    
-                    
+                    float3 viewDirection = normalize(_CameraPos - i.worldPosition);
+                    float3 n = normalize(i.worldNormal);
 
-                    half4 pointLightContribution = computePointLight(diffuseColor, _PointLightPos, _PointLightColor, i.worldPosition, normal, viewDirection);
-                    half4 spotLightContribution = computeSpotLight(diffuseColor, _SpotLightPos, _SpotLightDirection, _SpotLightColor, _SpotLightInner, _SpotLightOuter,
-                                                                   i.worldPosition, normal, viewDirection);
-                    half4 directionalLightContribution = computeDirectionalLight(diffuseColor, _DirectionalLightDir, _DirectionalLightColor, i.worldPosition, normal, viewDirection);
+                    half3 pointLightContribution = computePointLight(diffuseColor, _Roughness, _Specular, _PointLightPos, _PointLightColor, i.worldPosition, n, viewDirection);
+                    half3 directionalLightContribution = computeDirectionalLight(diffuseColor, _Roughness, _Specular, _DirectionalLightDir, _DirectionalLightColor, i.worldPosition, n, viewDirection);
+                    half3 spotLightContribution = computeSpotLight(diffuseColor, _Roughness, _Specular, _SpotLightPos, _SpotLightDirection, _SpotLightColor, _SpotLightInner, _SpotLightOuter, i.worldPosition, n, viewDirection);
 
-                    return half4(ambient + pointLightContribution + spotLightContribution + directionalLightContribution, 1);
+                    return half4(pointLightContribution + spotLightContribution + directionalLightContribution, 1.0);
                 }
-
                 ENDCG
             }
-    }
+        }
 }

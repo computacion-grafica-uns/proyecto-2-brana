@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ONV_Procedural
-  m_Shader: {fileID: 4800000, guid: 90deb9a15b21b684fb57a30177d51494, type: 3}
+  m_Name: BP3_ProceduralTest
+  m_Shader: {fileID: 4800000, guid: eeb2116c5b03b4547bef45c0e248aa9e, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -72,9 +72,7 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Roughness: 0.5
     - _SmoothnessTextureChannel: 0
-    - _Specular: 0
     - _SpecularExponent: 128
     - _SpecularHighlights: 1
     - _SpotLightInner: 12.5
@@ -82,31 +80,33 @@ Material:
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
-    - _amplitude: 8.17
-    - _frequency: 11
-    - _gain: 0.418
-    - _lacunarity: 3.18
+    - _amplitude: 6.65
+    - _frequency: 3.4
+    - _gain: 0.671
+    - _lacunarity: 4.21
+    - _monochromatic: 0
     - _octaves: 7
     - _offsetX: 0
     - _offsetY: 0
-    - _power: 4.16
-    - _scale: 11.1
-    - _value: 0.56
+    - _power: 1.5
+    - _range: 0.5
+    - _scale: 1
+    - _value: 1.78
     m_Colors:
+    - _AmbientLightColor: {r: 0.5754717, g: 0.5754717, b: 0.5754717, a: 0}
     - _CameraPos: {r: 3, g: 3, b: 0, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DiffuseColor: {r: 0.39999998, g: 0.39999998, b: 0.39999998, a: 1}
     - _DirectionalLightColor: {r: 1, g: 1, b: 1, a: 1}
     - _DirectionalLightDir: {r: 1, g: -1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _Ka: {r: 0, g: 0, b: 0, a: 0}
-    - _Kd: {r: 0, g: 0, b: 0, a: 0}
-    - _Ks: {r: 0, g: 0, b: 0, a: 0}
+    - _Ka: {r: 0.6037736, g: 0.6037736, b: 0.6037736, a: 0}
+    - _Kd: {r: 1, g: 1, b: 1, a: 0}
+    - _Ks: {r: 0.9528302, g: 0.9528302, b: 0.9528302, a: 0}
     - _PointLightColor: {r: 1, g: 1, b: 1, a: 1}
     - _PointLightPos: {r: 2, g: 3, b: 1, a: 1}
-    - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
     - _SpotLightColor: {r: 1, g: 1, b: 1, a: 1}
     - _SpotLightDirection: {r: 0, g: -1, b: 0, a: 1}
     - _SpotLightPos: {r: -5, g: 3, b: -4, a: 1}
+    - _color: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

@@ -12,8 +12,7 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
-  m_InvalidKeywords:
-  - _DIELECTRIC_ON
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -65,16 +64,16 @@ Material:
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
-    - _Dielectric: 1
+    - _Dielectric: 0
     - _DstBlend: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _Metallic: 0
+    - _Metallic: 0.854
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Roughness: 0.5
+    - _Roughness: 0.184
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SpotLightInner: 12.5
@@ -82,23 +81,23 @@ Material:
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
-    - _amplitude: 1.5
-    - _frequency: 2
-    - _gain: 0.5
-    - _lacunarity: 2
+    - _amplitude: 5.61
+    - _frequency: 8.8
+    - _gain: 0.684
+    - _lacunarity: 4.66
     - _monochromatic: 0
     - _octaves: 7
     - _offsetX: 0
     - _offsetY: 0
-    - _power: 1
+    - _power: 2.77
     - _range: 0.5
     - _scale: 1
-    - _value: 0
+    - _value: 0.58
     m_Colors:
-    - _AmbientLightColor: {r: 0, g: 0, b: 0, a: 0}
+    - _AmbientLightColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 0}
     - _CameraPos: {r: 3, g: 3, b: 0, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DiffuseColor: {r: 0, g: 0, b: 0, a: 0}
+    - _DiffuseColor: {r: 0.33962262, g: 0.33962262, b: 0.33962262, a: 0}
     - _DirectionalLightColor: {r: 1, g: 1, b: 1, a: 1}
     - _DirectionalLightDir: {r: 1, g: -1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}

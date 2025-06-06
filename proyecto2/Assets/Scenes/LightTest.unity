@@ -129,7 +129,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0
+      value: 0.292
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
       propertyPath: m_LocalPosition.y
@@ -137,11 +137,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -2.788
+      value: -3.211
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071069
+      value: 0.14039198
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
       propertyPath: m_LocalRotation.x
@@ -149,7 +149,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.70710677
+      value: -0.99009603
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
       propertyPath: m_LocalRotation.z
@@ -161,7 +161,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -90
+      value: -163.859
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -170,7 +170,7 @@ PrefabInstance:
     - target: {fileID: 153430669326387661, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 20f732312becc434f9534ca066c4e533, type: 2}
+      objectReference: {fileID: 2100000, guid: ca26c354d0cd0e24aacb86c454746c71, type: 2}
     - target: {fileID: 919132149155446097, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
       propertyPath: m_Name
       value: HoudiniTeapot (2)
@@ -526,7 +526,7 @@ PrefabInstance:
     - target: {fileID: -7635826562936255635, guid: d06280bd496a69e49b642851ea06f257, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: bb1d2b42d6bdf524cb9c00f5273b8255, type: 2}
+      objectReference: {fileID: 2100000, guid: ca26c354d0cd0e24aacb86c454746c71, type: 2}
     - target: {fileID: 919132149155446097, guid: d06280bd496a69e49b642851ea06f257, type: 3}
       propertyPath: m_Name
       value: StanfordDragon

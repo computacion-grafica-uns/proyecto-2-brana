@@ -73,7 +73,7 @@ Material:
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
-    - _SpecularExponent: 32
+    - _SpecularExponent: 64
     - _SpecularHighlights: 1
     - _SpotLightInner: 12.5
     - _SpotLightOuter: 15
@@ -89,7 +89,7 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Ka: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 0}
     - _Kd: {r: 1, g: 1, b: 1, a: 0}
-    - _Ks: {r: 0.8867924, g: 0.8867924, b: 0.8867924, a: 0}
+    - _Ks: {r: 0.45490196, g: 0.45490196, b: 0.45490196, a: 0}
     - _PointLightColor: {r: 1, g: 1, b: 1, a: 1}
     - _PointLightPos: {r: 2, g: 3, b: 1, a: 1}
     - _SpotLightColor: {r: 1, g: 1, b: 1, a: 1}

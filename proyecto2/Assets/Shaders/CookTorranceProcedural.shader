@@ -34,8 +34,6 @@ Shader "CookTorranceProcedural"
         _frequency("Frequency", Range(0.0 , 16.0)) = 2.0
         _power("Power", Range(0.1 , 5.0)) = 1.0
         _scale("Scale", Float) = 1.0
-        [Toggle] _monochromatic("Monochromatic", Float) = 0
-        _range("Monochromatic Range", Range(0.0 , 1.0)) = 0.5
     }
         SubShader
     {
@@ -250,7 +248,7 @@ Shader "CookTorranceProcedural"
                 return half4(diffuseComponent + finalSpecular, 1.0);
             }
 
-            float _octaves, _lacunarity, _gain, _value, _amplitude, _frequency, _offsetX, _offsetY, _power, _scale, _monochromatic, _range;
+            float _octaves, _lacunarity, _gain, _value, _amplitude, _frequency, _offsetX, _offsetY, _power, _scale;
             float fbm(float2 p)
             {
                 p = p * _scale + float2(_offsetX, _offsetY);
