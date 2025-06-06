@@ -177,12 +177,15 @@ Shader "OrenNayarTextured"
                 }
 
                 sampler2D _MainTex;
+                float4 _MainTex_ST;
 
                 fixed4 frag(v2f i) : SV_Target
                 {
                     _Roughness = clamp(_Roughness, 0.01, 0.97);
                     _Specular = clamp(_Specular, 0.0, 4096.0);
-                    float4 diffuseColor = tex2D(_MainTex, i.uv);
+                    float2 scaledUV = TRANSFORM_TEX(i.uv, _MainTex);
+                    float4 diffuseColor = tex2D(_MainTex, scaledUV);
+
                     float3 viewDirection = normalize(_CameraPos - i.worldPosition);
                     float3 n = normalize(i.worldNormal);
 

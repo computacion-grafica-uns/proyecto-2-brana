@@ -80,18 +80,18 @@ Material:
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
-    - _amplitude: 2.61
-    - _frequency: 3.15
-    - _gain: 0.846
-    - _lacunarity: 5
+    - _amplitude: 6.65
+    - _frequency: 3.4
+    - _gain: 0.671
+    - _lacunarity: 4.39
     - _monochromatic: 0
     - _octaves: 7
     - _offsetX: 0
     - _offsetY: 0
-    - _power: 1
+    - _power: 1.5
     - _range: 0.5
     - _scale: 1
-    - _value: 0.08
+    - _value: 1.78
     m_Colors:
     - _AmbientLightColor: {r: 0.5754717, g: 0.5754717, b: 0.5754717, a: 0}
     - _CameraPos: {r: 3, g: 3, b: 0, a: 1}
@@ -100,8 +100,8 @@ Material:
     - _DirectionalLightDir: {r: 1, g: -1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Ka: {r: 0.6037736, g: 0.6037736, b: 0.6037736, a: 0}
-    - _Kd: {r: 0, g: 0.7830189, b: 0.19311273, a: 0}
-    - _Ks: {r: 0, g: 0.8867924, b: 0.0049856785, a: 0}
+    - _Kd: {r: 1, g: 1, b: 1, a: 0}
+    - _Ks: {r: 0.9528302, g: 0.9528302, b: 0.9528302, a: 0}
     - _PointLightColor: {r: 1, g: 1, b: 1, a: 1}
     - _PointLightPos: {r: 2, g: 3, b: 1, a: 1}
     - _SpotLightColor: {r: 1, g: 1, b: 1, a: 1}

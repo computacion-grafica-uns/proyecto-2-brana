@@ -27,8 +27,8 @@ Shader "BPThreeLightsProcedural" {
         _lacunarity("Lacunarity", Range(1.0 , 5.0)) = 2
         _gain("Gain", Range(0.0 , 1.0)) = 0.5
         _value("Value", Range(-2.0 , 2.0)) = 0.0
-        _amplitude("Amplitude", Range(0.0 , 5.0)) = 1.5
-        _frequency("Frequency", Range(0.0 , 6.0)) = 2.0
+        _amplitude("Amplitude", Range(0.0 , 10.0)) = 1.5
+        _frequency("Frequency", Range(0.0 , 16.0)) = 2.0
         _power("Power", Range(0.1 , 5.0)) = 1.0
         _scale("Scale", Float) = 1.0
         [Toggle] _monochromatic("Monochromatic", Float) = 0
@@ -181,14 +181,40 @@ Shader "BPThreeLightsProcedural" {
                     return pow(_value * 0.5 + 0.5, _power);
                 }
 
+                float turbulence(float2 xy, float size)
+                {
+                    float value = 0.0, initialSize = size;
+
+                    while (size >= 1)
+                    {
+                        value += fbm(xy / size) * size;
+                        size /= 2.0;
+                    }
+
+                    return (128.0 * value / initialSize) / 255.0;
+                }
+
                 fixed4 frag(v2f i) : SV_Target {
                     float3 normal = normalize(i.worldNormal);
                     float3 viewDirection = normalize(_CameraPos - i.worldPosition);
 
-                    float c = fbm(i.uv.xy);
-                    float4 diffuseColor = float4(c, c, c, 1.0) * float4(_Kd, 1.0);
+                    float xPeriod = 35.0; //defines repetition of marble lines in x direction
+                    float yPeriod = 30.0; //defines repetition of marble lines in y direction
+                    float turbPower = 1.0; //makes twists
+                    float turbSize = 8.0; //initial size of the turbulence
+
+                    // float xyValue = i.uv.x * xPeriod + i.uv.y * yPeriod + turbPower * fbm(i.uv.xy)/10;
+                    float xyValue = i.uv.x * xPeriod + i.uv.y * yPeriod + turbPower * turbulence(i.uv.xy, turbSize);
+                    float sineValue = abs(sin(xyValue * 3.14159));
+                    float4 diffuseColor = float4(sineValue, sineValue, sineValue, 1.0);
+                    
+                    // float c = fbm(i.uv.xy);
+                    // float4 diffuseColor = float4(c, c, c, 1.0) * float4(_Kd, 1.0);
                     
                     float3 ambient = _AmbientLightColor * _Ka.rgb;
+
+                    
+                    
 
                     half4 pointLightContribution = computePointLight(diffuseColor, _PointLightPos, _PointLightColor, i.worldPosition, normal, viewDirection);
                     half4 spotLightContribution = computeSpotLight(diffuseColor, _SpotLightPos, _SpotLightDirection, _SpotLightColor, _SpotLightInner, _SpotLightOuter,
