@@ -855,6 +855,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 153430669326387661, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f9620419d8aaf0743a7ae8d261b15dde, type: 2}
     - target: {fileID: 919132149155446097, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
       propertyPath: m_Name
       value: Cook-Torrance Propio
@@ -1004,7 +1008,7 @@ PrefabInstance:
     - target: {fileID: 153430669326387661, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 2830bd2227b39144b980774cef1033a2, type: 2}
+      objectReference: {fileID: 2100000, guid: 57f4d071ae5a39b4e9db28348dd7c142, type: 2}
     - target: {fileID: 919132149155446097, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
       propertyPath: m_Name
       value: Otro Multitextura
