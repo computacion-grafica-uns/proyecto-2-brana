@@ -1,4 +1,4 @@
-Shader "OrenNayarTextured"
+Shader "OrenNayarMultitexture"
 {
     Properties
     {
