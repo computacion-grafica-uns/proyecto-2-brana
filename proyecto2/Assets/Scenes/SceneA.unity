@@ -406,7 +406,7 @@ PrefabInstance:
     - target: {fileID: 153430669326387661, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 3581ad346784ad84691fa296743c48f9, type: 2}
+      objectReference: {fileID: 2100000, guid: 3a8b840522f7af94ebfdd8fa4ed2c2c6, type: 2}
     - target: {fileID: 919132149155446097, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
       propertyPath: m_Name
       value: Cook-Torrance Procedural
@@ -634,7 +634,7 @@ PrefabInstance:
     - target: {fileID: 153430669326387661, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 0f603e4815fce5a4a963046c414c03fe, type: 2}
+      objectReference: {fileID: 2100000, guid: 3a8b840522f7af94ebfdd8fa4ed2c2c6, type: 2}
     - target: {fileID: 919132149155446097, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
       propertyPath: m_Name
       value: Cook-Torrance Multitextura
@@ -1660,7 +1660,7 @@ PrefabInstance:
     - target: {fileID: 153430669326387661, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: b38da8edceb433d4caf68161b464f941, type: 2}
+      objectReference: {fileID: 2100000, guid: 3a8b840522f7af94ebfdd8fa4ed2c2c6, type: 2}
     - target: {fileID: 919132149155446097, guid: efb9e9443e2e6dc418525a85a8223db9, type: 3}
       propertyPath: m_Name
       value: Otro Procedural

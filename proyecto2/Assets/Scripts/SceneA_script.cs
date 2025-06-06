@@ -51,6 +51,10 @@ public class SceneA_Script : MonoBehaviour
         mainObjects = GameObject.FindGameObjectsWithTag("SceneObject");
         pointLight = GameObject.FindGameObjectsWithTag("ScenePointLight")[0];
         directionalLight = GameObject.FindGameObjectsWithTag("SceneDirectionalLight")[0];
+
+        pointLightEnabled = true;
+        directionalLightEnabled = true;
+        spotLightEnabled = true;
     }
 
     void SwapCameras()
@@ -64,6 +68,12 @@ public class SceneA_Script : MonoBehaviour
         focusedObject++;
         if (focusedObject >= mainObjects.Length) { focusedObject = 0; }
     }
+
+    bool pointLightEnabled;
+    bool directionalLightEnabled;
+    bool spotLightEnabled;
+    Color pointLightColor, directionalLightColor, spotLightColor;
+    Color none = new Color(0.0f, 0.0f, 0.0f, 0.0f);
 
     void Update() {
         orbital.Update(); // TODO: change so it calls the current camera controller's Update() instead
@@ -84,15 +94,50 @@ public class SceneA_Script : MonoBehaviour
             SwapCameras();
         }
 
-        /*
         // 1,2,3 to disable and enable each light
-        if (Input.GetKeyDown(KeyCode.1)) {
-            foreach (Material mat in sceneMaterials)
+        if (Input.GetKeyDown(KeyCode.Alpha1)) {
+            if (pointLightEnabled)
             {
-                mat.Set...
+                pointLightColor = sceneMaterials[0].GetColor("_PointLightColor");
+                foreach (Material mat in sceneMaterials) { mat.SetColor("_PointLightColor", none); }
+                pointLightEnabled = false;
+            } else
+            {
+                foreach (Material mat in sceneMaterials) { mat.SetColor("_PointLightColor", pointLightColor); }
+                pointLightEnabled = true;
             }
         }
-        */
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            if (directionalLightEnabled)
+            {
+                directionalLightColor = sceneMaterials[0].GetColor("_DirectionalLightColor");
+                foreach (Material mat in sceneMaterials) { mat.SetColor("_DirectionalLightColor", none); }
+                directionalLightEnabled = false;
+            }
+            else
+            {
+                foreach (Material mat in sceneMaterials) { mat.SetColor("_DirectionalLightColor", directionalLightColor); }
+                directionalLightEnabled = true;
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            if (spotLightEnabled)
+            {
+                spotLightColor = sceneMaterials[0].GetColor("_SpotLightColor");
+                foreach (Material mat in sceneMaterials) { mat.SetColor("_SpotLightColor", Vector4.zero); }
+                spotLightEnabled = false;
+            }
+            else
+            {
+                foreach (Material mat in sceneMaterials) { mat.SetColor("_SpotLightColor", spotLightColor); }
+                spotLightEnabled = true;
+            }
+        }
+
 
         if (Input.GetMouseButtonDown(0)) {
             RaycastHit hit;
